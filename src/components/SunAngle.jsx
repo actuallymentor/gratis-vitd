@@ -26,11 +26,22 @@ const wedge_path = ( start_deg, end_deg, r = RADIUS ) => {
     return `M ${ CX },${ CY } L ${ p1.x },${ p1.y } A ${ r } ${ r } 0 ${ large_arc } 0 ${ p2.x },${ p2.y } Z`
 }
 
+// Horizontal chord across the dome at a given elevation angle.
+// Returns { x1, y1, x2, y2 } where the chord intersects the semicircle.
+const chord_at = ( degrees ) => {
+    const clamped = Math.max( 0, Math.min( 90, degrees ) )
+    const rad = clamped * ( Math.PI / 180 )
+    const y = CY - RADIUS * Math.sin( rad )
+    const half_width = RADIUS * Math.cos( rad )
+    return { x1: CX - half_width, y: y, x2: CX + half_width }
+}
+
 /**
- * Animated SVG sun gauge showing current solar elevation and 45° vitamin D threshold
- * @param {{ elevation: number }} props
+ * Animated SVG sun gauge showing current solar elevation,
+ * today's max elevation arc, and 45° vitamin D threshold line
+ * @param {{ elevation: number, max_elevation: number }} props
  */
-export function SunAngle( { elevation } ) {
+export function SunAngle( { elevation, max_elevation } ) {
 
     // Animate from 0 to real elevation on mount / change
     const [ animated, set_animated ] = useState( 0 )
@@ -45,8 +56,10 @@ export function SunAngle( { elevation } ) {
     const above_threshold = clamped >= 45
     const display_angle = Math.round( elevation )
 
-    // 45° threshold line endpoints
-    const threshold_end = arc_point( 45, RADIUS + 10 )
+    // Chord lines
+    const vitd_chord = chord_at( 45 )
+    const max_clamped = Math.max( 0, Math.min( 90, max_elevation ) )
+    const max_chord = chord_at( max_clamped )
 
     // Tick marks
     const horizon_label = arc_point( 0, RADIUS + 16 )
@@ -68,33 +81,42 @@ export function SunAngle( { elevation } ) {
             strokeWidth="1"
         />
 
-        { /* Vitamin D zone wedge — green tint from 45° to 135° (mirrored) */ }
+        { /* Vitamin D zone — green tint above 45° */ }
         <path
             d={ wedge_path( 45, 135 ) }
             fill="#dcfce7"
             opacity="0.6"
         />
 
-        { /* 45° threshold lines — dashed */ }
+        { /* 45° vitamin D threshold chord — green dashed line */ }
         <line
-            x1={ CX } y1={ CY }
-            x2={ threshold_end.x } y2={ threshold_end.y }
-            stroke="#22c55e" strokeWidth="1.5" strokeDasharray="4 3" opacity="0.7"
-        />
-        <line
-            x1={ CX } y1={ CY }
-            x2={ CX - ( threshold_end.x - CX ) } y2={ threshold_end.y }
-            stroke="#22c55e" strokeWidth="1.5" strokeDasharray="4 3" opacity="0.7"
+            x1={ vitd_chord.x1 } y1={ vitd_chord.y }
+            x2={ vitd_chord.x2 } y2={ vitd_chord.y }
+            stroke="#22c55e" strokeWidth="1.5" strokeDasharray="4 3" opacity="0.8"
         />
 
-        { /* 45° label */ }
+        { /* 45° label on the right side of the chord */ }
         <text
-            x={ arc_point( 45, RADIUS + 22 ).x + 2 }
-            y={ arc_point( 45, RADIUS + 22 ).y }
-            fontSize="9" fill="#22c55e" fontWeight="600" textAnchor="start"
+            x={ vitd_chord.x2 + 4 } y={ vitd_chord.y + 3 }
+            fontSize="8" fill="#22c55e" fontWeight="600"
         >
-            45°
+            45° vit D
         </text>
+
+        { /* Max elevation chord — amber line showing today's sun peak */ }
+        { max_clamped > 0 && <line
+            x1={ max_chord.x1 } y1={ max_chord.y }
+            x2={ max_chord.x2 } y2={ max_chord.y }
+            stroke="#f59e0b" strokeWidth="1.5" strokeDasharray="4 3" opacity="0.7"
+        /> }
+
+        { /* Max elevation label */ }
+        { max_clamped > 0 && <text
+            x={ max_chord.x2 + 4 } y={ max_chord.y + 3 }
+            fontSize="8" fill="#d97706" fontWeight="600"
+        >
+            { Math.round( max_elevation ) }° peak
+        </text> }
 
         { /* Horizon arc line */ }
         <line

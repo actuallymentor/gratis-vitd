@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.3.1] - 2026-03-04
+
+### Changed
+- Sun gauge shows horizontal chord lines for 45° vit D threshold and today's peak elevation
+
 ## [0.3.0] - 2026-03-04
 
 ### Added

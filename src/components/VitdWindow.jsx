@@ -19,7 +19,7 @@ export function VitdWindow( { window: vitd_window, exposure, current_elevation }
         <h2>Today's Window</h2>
 
         { /* Live sun angle gauge */ }
-        { current_elevation !== null && <SunAngle elevation={ current_elevation } /> }
+        { current_elevation !== null && <SunAngle elevation={ current_elevation } max_elevation={ max_elevation } /> }
 
         { has_window ? <>
 
