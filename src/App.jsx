@@ -5,6 +5,7 @@ import { LocationPicker } from './components/LocationPicker'
 import { SkinTypeSelector } from './components/SkinTypeSelector'
 import { VitdWindow } from './components/VitdWindow'
 import { VitdSeason } from './components/VitdSeason'
+import { VitdMap } from './components/VitdMap'
 
 export default function App() {
 
@@ -15,7 +16,7 @@ export default function App() {
     const [ skin_type, set_skin_type ] = useState( 1 )
 
     // Computed vitamin D data
-    const { window: vitd_window, season, exposure, current_elevation } = use_vitd_data( latitude, longitude, skin_type )
+    const { window: vitd_window, season, exposure, current_elevation, latitude_bands } = use_vitd_data( latitude, longitude, skin_type )
 
     return <>
 
@@ -51,6 +52,9 @@ export default function App() {
 
         { /* Annual season */ }
         <VitdSeason season={ season } />
+
+        { /* World vitamin D map */ }
+        <VitdMap latitude_bands={ latitude_bands } user_lat={ latitude } user_lng={ longitude } />
 
         { /* Disclaimer */ }
         <p className="disclaimer">

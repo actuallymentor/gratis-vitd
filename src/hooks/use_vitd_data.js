@@ -1,13 +1,14 @@
 import { useMemo, useState, useEffect, useCallback } from 'react'
 import { get_vitd_window, get_current_elevation } from '../modules/solar'
 import { find_vitd_season, get_exposure_time } from '../modules/vitd'
+import { compute_latitude_bands } from '../modules/vitd_map'
 
 /**
  * Combines location + skin type into computed vitamin D results
  * @param {number|null} latitude
  * @param {number|null} longitude
  * @param {number} skin_type_index - Zero-based index into skin_types
- * @returns {{ window: object|null, season: object|null, exposure: object|null, current_elevation: number|null }}
+ * @returns {{ window: object|null, season: object|null, exposure: object|null, current_elevation: number|null, latitude_bands: Array }}
  */
 export const use_vitd_data = ( latitude, longitude, skin_type_index ) => {
 
@@ -39,5 +40,8 @@ export const use_vitd_data = ( latitude, longitude, skin_type_index ) => {
         return () => clearInterval( timer )
     }, [ compute_elevation ] )
 
-    return { window: today_window, season, exposure, current_elevation }
+    // Global latitude band classification — date-only, computed once per session
+    const latitude_bands = useMemo( () => compute_latitude_bands( new Date() ), [] )
+
+    return { window: today_window, season, exposure, current_elevation, latitude_bands }
 }

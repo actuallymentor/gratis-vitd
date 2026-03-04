@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.3.0] - 2026-03-04
+
+### Added
+- World vitamin D heatmap showing synthesis zones by latitude band
+- Simplified continent outlines on equirectangular SVG projection
+- Green/amber/red latitude band coloring for vitd/marginal/low zones
+- 45° threshold dashed lines and latitude range callout
+- User location marker on world map
+
 ## [0.2.0] - 2026-03-04
 
 ### Added
