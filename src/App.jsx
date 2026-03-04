@@ -15,7 +15,7 @@ export default function App() {
     const [ skin_type, set_skin_type ] = useState( 1 )
 
     // Computed vitamin D data
-    const { window: vitd_window, season, exposure } = use_vitd_data( latitude, longitude, skin_type )
+    const { window: vitd_window, season, exposure, current_elevation } = use_vitd_data( latitude, longitude, skin_type )
 
     return <>
 
@@ -47,7 +47,7 @@ export default function App() {
         <SkinTypeSelector selected={ skin_type } on_select={ set_skin_type } />
 
         { /* Today's window */ }
-        <VitdWindow window={ vitd_window } exposure={ exposure } />
+        <VitdWindow window={ vitd_window } exposure={ exposure } current_elevation={ current_elevation } />
 
         { /* Annual season */ }
         <VitdSeason season={ season } />

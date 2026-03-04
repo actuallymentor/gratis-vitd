@@ -1,8 +1,10 @@
+import { SunAngle } from './SunAngle'
+
 /**
  * Displays today's vitamin D synthesis window and exposure recommendation
- * @param {{ window: object|null, exposure: object|null }} props
+ * @param {{ window: object|null, exposure: object|null, current_elevation: number|null }} props
  */
-export function VitdWindow( { window: vitd_window, exposure } ) {
+export function VitdWindow( { window: vitd_window, exposure, current_elevation } ) {
 
     if( !vitd_window ) return null
 
@@ -15,6 +17,9 @@ export function VitdWindow( { window: vitd_window, exposure } ) {
     return <div className="card">
 
         <h2>Today's Window</h2>
+
+        { /* Live sun angle gauge */ }
+        { current_elevation !== null && <SunAngle elevation={ current_elevation } /> }
 
         { has_window ? <>
 

@@ -1,5 +1,5 @@
-import { useMemo } from 'react'
-import { get_vitd_window } from '../modules/solar'
+import { useMemo, useState, useEffect, useCallback } from 'react'
+import { get_vitd_window, get_current_elevation } from '../modules/solar'
 import { find_vitd_season, get_exposure_time } from '../modules/vitd'
 
 /**
@@ -7,7 +7,7 @@ import { find_vitd_season, get_exposure_time } from '../modules/vitd'
  * @param {number|null} latitude
  * @param {number|null} longitude
  * @param {number} skin_type_index - Zero-based index into skin_types
- * @returns {{ window: object|null, season: object|null, exposure: object|null }}
+ * @returns {{ window: object|null, season: object|null, exposure: object|null, current_elevation: number|null }}
  */
 export const use_vitd_data = ( latitude, longitude, skin_type_index ) => {
 
@@ -25,5 +25,19 @@ export const use_vitd_data = ( latitude, longitude, skin_type_index ) => {
         return get_exposure_time( skin_type_index )
     }, [ skin_type_index ] )
 
-    return { window: today_window, season, exposure }
+    // Live sun elevation, refreshed every 60s
+    const compute_elevation = useCallback( () => {
+        if( latitude === null || longitude === null ) return null
+        return get_current_elevation( latitude, longitude )
+    }, [ latitude, longitude ] )
+
+    const [ current_elevation, set_current_elevation ] = useState( compute_elevation )
+
+    useEffect( () => {
+        set_current_elevation( compute_elevation() )
+        const timer = setInterval( () => set_current_elevation( compute_elevation() ), 60_000 )
+        return () => clearInterval( timer )
+    }, [ compute_elevation ] )
+
+    return { window: today_window, season, exposure, current_elevation }
 }

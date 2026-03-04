@@ -1,12 +1,9 @@
 # Changelog
 
-## [0.1.0] - 2026-03-04
+## [0.2.0] - 2026-03-04
 
 ### Added
-- vitamin D synthesis window calculator based on solar elevation angle
-- Fitzpatrick skin type selector (I–VI) with exposure time recommendations
-- annual vitamin D season display with visual year bar
-- browser geolocation detection with manual lat/lng fallback
-- localStorage persistence for last known location
-- PWA support with offline capability via vite-plugin-pwa
-- SVG sun favicon and generated PNG icons (192/512)
+- Animated SVG sun elevation gauge in Today's Window card
+- Live sun angle updates every 60s via `get_current_elevation`
+- 45° vitamin D threshold visualization with green zone
+- Sun rays appear when elevation exceeds 45°

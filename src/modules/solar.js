@@ -22,6 +22,18 @@ export const get_max_elevation = ( date, lat, lng ) => {
 }
 
 /**
+ * Get the current solar elevation angle right now for a given location.
+ * @param {number} lat - Latitude in degrees
+ * @param {number} lng - Longitude in degrees
+ * @returns {number} Current elevation in degrees (negative = below horizon)
+ */
+export const get_current_elevation = ( lat, lng ) => {
+
+    const position = SunCalc.getPosition( new Date(), lat, lng )
+    return position.altitude * ( 180 / Math.PI )
+}
+
+/**
  * Get the vitamin D synthesis window for a given date and location.
  * UVB sufficient for vitamin D only reaches the surface when solar elevation > 45°.
  * @param {Date} date - The date to check
