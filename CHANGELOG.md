@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1] - 2026-03-04
+
+### Added
+- Cloudflare Workers Static Assets deployment via `wrangler.toml`
+- GitHub Actions workflow for auto-deploy on version bump
+- `.nvmrc` pinning Node 24
+
 ## [0.4.0] - 2026-03-04
 
 ### Added
