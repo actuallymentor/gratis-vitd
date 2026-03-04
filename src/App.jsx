@@ -34,27 +34,32 @@ export default function App() {
             <p className="muted">free vitamin d calculator</p>
         </header>
 
-        { /* Location */ }
-        <LocationPicker
-            latitude={ latitude }
-            longitude={ longitude }
-            loading={ loading }
-            error={ error }
-            detect={ detect }
-            set_manual={ set_manual }
-        />
+        { /* Card grid — 2 columns when viewport is wide enough */ }
+        <div className="card-grid">
 
-        { /* Skin type */ }
-        <SkinTypeSelector selected={ skin_type } on_select={ set_skin_type } />
+            { /* Location */ }
+            <LocationPicker
+                latitude={ latitude }
+                longitude={ longitude }
+                loading={ loading }
+                error={ error }
+                detect={ detect }
+                set_manual={ set_manual }
+            />
 
-        { /* Today's window */ }
-        <VitdWindow window={ vitd_window } exposure={ exposure } current_elevation={ current_elevation } />
+            { /* Skin type */ }
+            <SkinTypeSelector selected={ skin_type } on_select={ set_skin_type } />
 
-        { /* Annual season */ }
-        <VitdSeason season={ season } />
+            { /* Today's window */ }
+            <VitdWindow window={ vitd_window } exposure={ exposure } current_elevation={ current_elevation } />
 
-        { /* World vitamin D map */ }
-        <VitdMap latitude_bands={ latitude_bands } user_lat={ latitude } user_lng={ longitude } />
+            { /* Annual season */ }
+            <VitdSeason season={ season } />
+
+            { /* World vitamin D map — spans full width */ }
+            <VitdMap latitude_bands={ latitude_bands } user_lat={ latitude } user_lng={ longitude } />
+
+        </div>
 
         { /* Disclaimer */ }
         <p className="disclaimer">

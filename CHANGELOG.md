@@ -1,6 +1,10 @@
 # Changelog
 
-## [0.3.1] - 2026-03-04
+## [0.4.0] - 2026-03-04
+
+### Added
+- Responsive 2-column card grid on wider viewports (≥720px)
+- World map card spans full width in 2-col mode
 
 ### Changed
 - Sun gauge shows horizontal chord lines for 45° vit D threshold and today's peak elevation

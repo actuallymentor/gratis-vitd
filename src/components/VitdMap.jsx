@@ -101,7 +101,7 @@ export function VitdMap( { latitude_bands, user_lat, user_lng } ) {
     const user_x = user_lng !== null ? user_lng + 180 : null
     const user_y = user_lat !== null ? 90 - user_lat : null
 
-    return <div className="card">
+    return <div className="card card-wide">
 
         <h2>World Vitamin D Map</h2>
 
