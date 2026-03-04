@@ -29,9 +29,11 @@ export default function App() {
         } }
         >
             <h1 style={ { fontSize: `1.6rem`, fontWeight: 800, color: `var(--color-sun-dark)` } }>
-                gratis vit d
+                Vitamin D Calculator
             </h1>
-            <p className="muted">free vitamin d calculator</p>
+            <p className="muted" style={ { marginTop: `0.4rem`, maxWidth: `36ch`, marginInline: `auto`, lineHeight: 1.4 } }>
+                Find out when and where the sun is strong enough for your skin to make vitamin D, based on your location, skin type, and time of year.
+            </p>
         </header>
 
         { /* Card grid — 2 columns when viewport is wide enough */ }
