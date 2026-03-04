@@ -1,5 +1,26 @@
-import { useMemo } from 'react'
-import { find_threshold_latitudes } from '../modules/vitd_map'
+import { useState, useMemo } from 'react'
+import { compute_latitude_bands, find_threshold_latitudes } from '../modules/vitd_map'
+
+// -- Week ↔ Date helpers -----------------------------------------------------
+
+// Current week of the year (0-indexed, 0–51)
+const current_week = () => {
+    const now = new Date()
+    const start = new Date( now.getFullYear(), 0, 1 )
+    return Math.floor( ( now - start ) / ( 7 * 86_400_000 ) )
+}
+
+// Convert week index (0–51) to a Date on the Monday of that week
+const week_to_date = ( week ) => {
+    const year = new Date().getFullYear()
+    const jan1 = new Date( year, 0, 1 )
+    const day_offset = week * 7 - jan1.getDay() + 1
+    return new Date( year, 0, 1 + day_offset )
+}
+
+// Short month-day label for a date
+const format_short = ( date ) =>
+    date.toLocaleDateString( undefined, { month: `short`, day: `numeric` } )
 
 // -- Continent outlines for equirectangular projection -----------------------
 // Coordinates: [ lng, lat ] pairs → projected as x = lng + 180, y = 90 - lat
@@ -85,10 +106,22 @@ const LEGEND = [
 // -- Component ---------------------------------------------------------------
 
 /**
- * World heatmap showing vitamin D synthesis zones by latitude band
- * @param {{ latitude_bands: Array, user_lat: number|null, user_lng: number|null }} props
+ * World heatmap showing vitamin D synthesis zones by latitude band,
+ * with a week-of-year slider to explore seasonal changes
+ * @param {{ user_lat: number|null, user_lng: number|null }} props
  */
-export function VitdMap( { latitude_bands, user_lat, user_lng } ) {
+export function VitdMap( { user_lat, user_lng } ) {
+
+    // Week slider state — defaults to current week
+    const [ week, set_week ] = useState( current_week )
+
+    // Compute bands and thresholds for the selected week
+    const selected_date = useMemo( () => week_to_date( week ), [ week ] )
+
+    const latitude_bands = useMemo(
+        () => compute_latitude_bands( selected_date ),
+        [ selected_date ]
+    )
 
     const thresholds = useMemo(
         () => find_threshold_latitudes( latitude_bands ),
@@ -97,13 +130,44 @@ export function VitdMap( { latitude_bands, user_lat, user_lng } ) {
 
     const has_vitd_zone = thresholds.north !== null
 
+    // Week label — show date range for the selected week
+    const week_end = new Date( selected_date.getTime() + 6 * 86_400_000 )
+    const week_label = `${ format_short( selected_date ) } – ${ format_short( week_end ) }`
+
     // Project lat/lng to SVG coordinates
     const user_x = user_lng !== null ? user_lng + 180 : null
     const user_y = user_lat !== null ? 90 - user_lat : null
 
+    // Reset to current week
+    const reset_week = () => set_week( current_week() )
+    const is_current = week === current_week()
+
     return <div className="card card-wide">
 
         <h2>World Vitamin D Map</h2>
+
+        { /* Week slider */ }
+        <div style={ { marginBottom: `0.6rem` } }>
+            <div style={ { display: `flex`, alignItems: `center`, gap: `0.5rem`, marginBottom: `0.3rem` } }>
+                <input
+                    type="range"
+                    min={ 0 } max={ 51 } step={ 1 }
+                    value={ week }
+                    onChange={ ( e ) => set_week( Number( e.target.value ) ) }
+                    style={ { flex: 1, padding: 0 } }
+                    aria-label="Week of year"
+                />
+                { !is_current && <button
+                    onClick={ reset_week }
+                    style={ { fontSize: `0.7rem`, padding: `0.2rem 0.5rem`, whiteSpace: `nowrap` } }
+                >
+                    Today
+                </button> }
+            </div>
+            <p className="muted" style={ { textAlign: `center`, fontSize: `0.78rem` } }>
+                { week_label }
+            </p>
+        </div>
 
         { /* SVG map */ }
         <svg

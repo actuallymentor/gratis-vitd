@@ -5,6 +5,8 @@
 ### Added
 - Responsive 2-column card grid on wider viewports (≥720px)
 - World map card spans full width in 2-col mode
+- Week-of-year date slider on world map to explore seasonal changes
+- "Today" reset button when slider is off current week
 
 ### Changed
 - Sun gauge shows horizontal chord lines for 45° vit D threshold and today's peak elevation
