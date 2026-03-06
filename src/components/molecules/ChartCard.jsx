@@ -67,7 +67,7 @@ export default function ChartCard( { lat, lng, skin_type, percent_exposed, targe
 
     return <Card>
 
-        <ChartTitle>Sun exposure today</ChartTitle>
+        <ChartTitle>Minutes of tanning needed for { target_iu } IU</ChartTitle>
 
         <ResponsiveContainer width="100%" height={ 320 } onResize={ handle_resize }>
             <LineChart data={ chart_data } margin={ { top: 5, right: 20, left: 0, bottom: 5 } }>
@@ -85,7 +85,7 @@ export default function ChartCard( { lat, lng, skin_type, percent_exposed, targe
                 />
 
                 <YAxis
-                    label={ { value: `Minutes`, angle: -90, position: `insideLeft`, style: { fontSize: 12 } } }
+                    label={ { value: `Minutes of tanning`, angle: -90, position: `insideLeft`, style: { fontSize: 12 } } }
                     tick={ { fontSize: 12 } }
                     stroke="var(--text-muted)"
                     domain={ [ 0, `auto` ] }
