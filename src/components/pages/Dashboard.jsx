@@ -60,11 +60,6 @@ const IconButton = styled.button`
     }
 `
 
-const LocationLabel = styled.p`
-    font-size: 0.85em;
-    color: var(--text-muted);
-`
-
 const SkinTypeLink = styled.button`
     display: inline;
     font-weight: 700;
@@ -94,7 +89,7 @@ const DAILY_RECOMMENDED_IU = 600
  */
 export default function Dashboard( { settings, update_settings, reset_settings } ) {
 
-    const { lat, lng, skin_type, percent_exposed, target_iu, location_name } = settings
+    const { lat, lng, skin_type, percent_exposed, target_iu } = settings
 
     // Local state for responsive inputs — debounce persistence
     const [ local_exposed, set_local_exposed ] = useState( percent_exposed )
@@ -141,8 +136,6 @@ export default function Dashboard( { settings, update_settings, reset_settings }
     return <Page>
         <Container>
 
-            { location_name && <LocationLabel>{ location_name }</LocationLabel> }
-
             { /* Chart */ }
             <ChartCard
                 lat={ lat }
@@ -157,7 +150,7 @@ export default function Dashboard( { settings, update_settings, reset_settings }
                 Assuming{ ` ` }
                 <SkinTypeLink onClick={ () => set_show_exposure_modal( true ) }>
                     { exposure_label( local_exposed ) }
-                </SkinTypeLink>{ ` ` }to the sun, skin type{ ` ` }
+                </SkinTypeLink>{ ` ` }exposed to the sun, skin type{ ` ` }
                 <SkinTypeLink onClick={ () => set_show_skin_modal( true ) }>
                     { LABELS[ local_skin ] }
                 </SkinTypeLink>, and a target of{ ` ` }

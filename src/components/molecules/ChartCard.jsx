@@ -14,12 +14,6 @@ const Card = styled.div`
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 `
 
-const ChartTitle = styled.h2`
-    margin-bottom: var(--space-m);
-    text-align: center;
-    font-weight: 600;
-`
-
 const SolarNoonText = styled.p`
     margin-top: var(--space-m);
     text-align: center;
@@ -92,8 +86,6 @@ export default function ChartCard( { lat, lng, skin_type, percent_exposed, targe
     const tick_font_size = chart_width < 400 ? 10 : 12
 
     return <Card>
-
-        <ChartTitle>Minutes of tanning needed for { target_iu } IU</ChartTitle>
 
         <ResponsiveContainer width="100%" height={ 320 } onResize={ handle_resize }>
             <LineChart data={ chart_data } margin={ { top: 5, right: 20, left: 0, bottom: 5 } }>
