@@ -11,8 +11,8 @@ export default defineConfig( {
                 name: `Gratis Vit D`,
                 short_name: `VitD`,
                 description: `Free vitamin D calculator — know when sunlight can make vitamin D for your skin type`,
-                theme_color: `#f59e0b`,
-                background_color: `#fffbeb`,
+                theme_color: `#67a6b6`,
+                background_color: `#f8f9fa`,
                 display: `standalone`,
                 icons: [
                     { src: `/logo192.png`, sizes: `192x192`, type: `image/png` },

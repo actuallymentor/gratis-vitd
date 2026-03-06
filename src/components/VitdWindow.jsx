@@ -1,7 +1,7 @@
 import { SunAngle } from './SunAngle'
 
 /**
- * Displays today's vitamin D synthesis window and exposure recommendation
+ * Displays today's vitamin D synthesis window — no card wrapper, intended for hero-right
  * @param {{ window: object|null, exposure: object|null, current_elevation: number|null }} props
  */
 export function VitdWindow( { window: vitd_window, exposure, current_elevation } ) {
@@ -14,9 +14,7 @@ export function VitdWindow( { window: vitd_window, exposure, current_elevation }
     // Format time as localized HH:MM
     const format_time = ( date ) => date.toLocaleTimeString( [], { hour: `2-digit`, minute: `2-digit` } )
 
-    return <div className="card">
-
-        <h2>Today's Window</h2>
+    return <div className="vitd-window-content">
 
         { /* Live sun angle gauge */ }
         { current_elevation !== null && <SunAngle elevation={ current_elevation } max_elevation={ max_elevation } /> }
@@ -29,22 +27,17 @@ export function VitdWindow( { window: vitd_window, exposure, current_elevation }
             </p>
 
             { /* Duration */ }
-            <p className="muted" style={ { marginTop: `0.25rem` } }>
-                { Math.round( ( end - start ) / 60_000 ) } minutes of vitamin D potential
+            <p className="muted" style={ { marginBlockStart: `var(--space-xs)` } }>
+                { Math.round( ( end - start ) / 60_000 ) } min of vitamin D potential
             </p>
-
-            { /* Exposure recommendation */ }
-            { exposure && <div className="warning" style={ { background: `#ecfdf5`, borderColor: `#a7f3d0` } }>
-                ~{ exposure.minutes } min exposure recommended for { exposure.label } skin (arms + face)
-            </div> }
 
         </> : <>
 
             { /* No window today */ }
-            <p style={ { fontSize: `1.1rem`, fontWeight: 600 } }>
+            <p className="result-heading">
                 Not possible today
             </p>
-            <p className="muted" style={ { marginTop: `0.25rem` } }>
+            <p className="muted" style={ { marginBlockStart: `var(--space-xs)` } }>
                 Max solar elevation: { max_elevation.toFixed( 1 ) }° (need 45°+)
             </p>
             <div className="warning">

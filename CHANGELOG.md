@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.5.0] - 2026-03-06
+
+### Added
+- Hero-centric layout with two-column split (left info, right window)
+- Coordinate entry modal with escape/backdrop close and scroll lock
+- Compact skin type selector variant for hero section
+- Prominent "Detect my location" button with accent styling
+- Exposure recommendation in season card when in-season
+- Solo centering mode when no location is set
+
+### Changed
+- Replace card-grid layout with hero + standalone cards
+- Move today's window into hero-right column
+- Season and map cards render as standalone full-width elements
+- Simplify app header to theme toggle only
+
+### Removed
+- LocationPicker component (replaced by hero inline controls + CoordModal)
+- Card-grid CSS layout system
+
 ## [0.4.1] - 2026-03-06
 
 ### Added

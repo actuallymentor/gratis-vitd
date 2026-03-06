@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, Fragment } from 'react'
 import { compute_latitude_bands, find_threshold_latitudes } from '../modules/vitd_map'
 
 // -- Week ↔ Date helpers -----------------------------------------------------
@@ -89,12 +89,18 @@ const CONTINENTS = [
 
 const continent_paths = CONTINENTS.map( to_path )
 
-// -- Zone colors -------------------------------------------------------------
+// -- Zone colors (now using CSS custom properties) ----------------------------
 
 const ZONE_COLORS = {
-    vitd:     `rgba(34,197,94,0.3)`,
-    marginal: `rgba(245,158,11,0.3)`,
-    low:      `rgba(239,68,68,0.15)`,
+    vitd:     `var(--color-vitd-zone)`,
+    marginal: `var(--color-marginal-zone)`,
+    low:      `var(--color-low-zone)`,
+}
+
+// Pattern IDs for color-blind accessibility
+const ZONE_PATTERNS = {
+    marginal: `pattern-marginal`,
+    low:      `pattern-low`,
 }
 
 const LEGEND = [
@@ -147,24 +153,23 @@ export function VitdMap( { user_lat, user_lng } ) {
         <h2>World Vitamin D Map</h2>
 
         { /* Week slider */ }
-        <div style={ { marginBottom: `0.6rem` } }>
-            <div style={ { display: `flex`, alignItems: `center`, gap: `0.5rem`, marginBottom: `0.3rem` } }>
+        <div className="map-slider-row">
+            <div className="map-slider-controls">
                 <input
                     type="range"
                     min={ 0 } max={ 51 } step={ 1 }
                     value={ week }
                     onChange={ ( e ) => set_week( Number( e.target.value ) ) }
-                    style={ { flex: 1, padding: 0 } }
                     aria-label="Week of year"
                 />
                 { !is_current && <button
+                    className="map-today-btn"
                     onClick={ reset_week }
-                    style={ { fontSize: `0.7rem`, padding: `0.2rem 0.5rem`, whiteSpace: `nowrap` } }
                 >
                     Today
                 </button> }
             </div>
-            <p className="muted" style={ { textAlign: `center`, fontSize: `0.78rem` } }>
+            <p className="muted map-slider-label">
                 { week_label }
             </p>
         </div>
@@ -172,30 +177,50 @@ export function VitdMap( { user_lat, user_lng } ) {
         { /* SVG map */ }
         <svg
             viewBox="0 0 360 180"
-            style={ { width: `100%`, height: `auto`, borderRadius: 8, background: `#e0f2fe` } }
+            className="map-svg"
             role="img"
             aria-label="World map showing vitamin D synthesis zones"
         >
 
+            { /* Color-blind accessible patterns */ }
+            <defs>
+                { /* Diagonal stripes for marginal zones */ }
+                <pattern id="pattern-marginal" patternUnits="userSpaceOnUse" width="4" height="4" patternTransform="rotate(45)">
+                    <line x1="0" y1="0" x2="0" y2="4" stroke="rgba(245,158,11,0.4)" strokeWidth="1" />
+                </pattern>
+                { /* Cross-hatch for low zones */ }
+                <pattern id="pattern-low" patternUnits="userSpaceOnUse" width="4" height="4">
+                    <line x1="0" y1="0" x2="4" y2="4" stroke="rgba(239,68,68,0.3)" strokeWidth="0.5" />
+                    <line x1="4" y1="0" x2="0" y2="4" stroke="rgba(239,68,68,0.3)" strokeWidth="0.5" />
+                </pattern>
+            </defs>
+
             { /* Latitude band heatmap */ }
-            { latitude_bands.map( ( { lat, zone } ) =>
+            { latitude_bands.map( ( { lat, zone } ) => <Fragment key={ lat }>
                 <rect
-                    key={ lat }
                     x={ 0 }
                     y={ 90 - lat }
                     width={ 360 }
                     height={ 1 }
                     fill={ ZONE_COLORS[ zone ] }
                 />
-            ) }
+                { /* Pattern overlay for color-blind accessibility */ }
+                { ZONE_PATTERNS[ zone ] && <rect
+                    x={ 0 }
+                    y={ 90 - lat }
+                    width={ 360 }
+                    height={ 1 }
+                    fill={ `url(#${ ZONE_PATTERNS[ zone ] })` }
+                /> }
+            </Fragment> ) }
 
             { /* Continent outlines */ }
             { continent_paths.map( ( d, i ) =>
                 <path
                     key={ i }
                     d={ d }
-                    fill="rgba(255,255,255,0.45)"
-                    stroke="rgba(120,113,108,0.4)"
+                    fill="var(--color-map-land)"
+                    stroke="var(--color-map-land-stroke)"
                     strokeWidth={ 0.5 }
                     strokeLinejoin="round"
                 />
@@ -204,7 +229,7 @@ export function VitdMap( { user_lat, user_lng } ) {
             { /* Equator reference line */ }
             <line
                 x1={ 0 } y1={ 90 } x2={ 360 } y2={ 90 }
-                stroke="rgba(120,113,108,0.3)"
+                stroke="var(--color-map-land-stroke)"
                 strokeWidth={ 0.3 }
                 strokeDasharray="3 2"
             />
@@ -231,32 +256,28 @@ export function VitdMap( { user_lat, user_lng } ) {
             { user_x !== null && user_y !== null && <circle
                 cx={ user_x } cy={ user_y } r={ 3 }
                 fill="var(--color-sun)"
-                stroke="#fff"
+                stroke="var(--color-bg-card)"
                 strokeWidth={ 0.8 }
             /> }
 
         </svg>
 
         { /* Legend */ }
-        <div style={ { display: `flex`, gap: `0.75rem`, flexWrap: `wrap`, marginTop: `0.6rem`, fontSize: `0.78rem` } }>
+        <div className="map-legend">
             { LEGEND.map( ( { zone, color, label } ) =>
-                <span key={ zone } style={ { display: `inline-flex`, alignItems: `center`, gap: `0.3rem` } }>
-                    <span style={ {
-                        width: 10, height: 10, borderRadius: 2,
-                        background: color, display: `inline-block`,
-                    } }
-                    />
+                <span key={ zone } className="legend-item">
+                    <span className="legend-swatch" style={ { background: color } } />
                     { label }
                 </span>
             ) }
         </div>
 
         { /* Threshold callout */ }
-        { has_vitd_zone && <p className="muted" style={ { marginTop: `0.4rem` } }>
+        { has_vitd_zone && <p className="muted" style={ { marginBlockStart: `var(--space-xs)` } }>
             Sun reaches 45°+ between { Math.abs( thresholds.south ) }°{ thresholds.south < 0 ? `S` : `N` } and { Math.abs( thresholds.north ) }°{ thresholds.north < 0 ? `S` : `N` }
         </p> }
 
-        { !has_vitd_zone && <p className="muted" style={ { marginTop: `0.4rem` } }>
+        { !has_vitd_zone && <p className="muted" style={ { marginBlockStart: `var(--space-xs)` } }>
             Sun does not reach 45° elevation anywhere today
         </p> }
 
