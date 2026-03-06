@@ -8,19 +8,15 @@ export default defineConfig( {
         VitePWA( {
             registerType: `autoUpdate`,
             manifest: {
-                name: `Gratis Vit D`,
-                short_name: `VitD`,
-                description: `Free vitamin D calculator — know when sunlight can make vitamin D for your skin type`,
-                theme_color: `#67a6b6`,
-                background_color: `#f8f9fa`,
+                name: `Vitamin D Calculator`,
+                short_name: `VitD Calc`,
+                description: `Calculate how long you need in the sun to produce vitamin D`,
+                theme_color: `#7ec0d0`,
+                background_color: `#ffffff`,
                 display: `standalone`,
                 icons: [
-                    { src: `/logo192.png`, sizes: `192x192`, type: `image/png` },
-                    { src: `/logo512.png`, sizes: `512x512`, type: `image/png`, purpose: `any maskable` },
+                    { src: `/favicon.svg`, sizes: `any`, type: `image/svg+xml` },
                 ],
-            },
-            workbox: {
-                globPatterns: [ `**/*.{js,css,html,svg,png,woff2}` ],
             },
         } ),
     ],

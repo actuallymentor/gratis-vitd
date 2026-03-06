@@ -1,65 +1,82 @@
-import { get_max_elevation } from './solar'
+// Skin type → time multiplier relative to fair/light skin (type 2)
+// Lower types reach dose faster, higher types need more time
+const SKIN_FACTORS = { 1: 0.7, 2: 1, 3: 1, 4: 2, 5: 5, 6: 10 }
 
-// Fitzpatrick skin types with exposure times (arms + face, at peak UV)
-export const skin_types = [
-    { type: 1, label: `Very Fair`, description: `Burns easily, never tans`, base_minutes: 5, color: `#fce4c0` },
-    { type: 2, label: `Fair`, description: `Burns easily, tans minimally`, base_minutes: 8, color: `#f0d0a0` },
-    { type: 3, label: `Medium`, description: `Burns moderately, tans gradually`, base_minutes: 12, color: `#d4a574` },
-    { type: 4, label: `Olive`, description: `Burns minimally, tans well`, base_minutes: 20, color: `#b07840` },
-    { type: 5, label: `Dark`, description: `Rarely burns, tans darkly`, base_minutes: 35, color: `#7a4a2a` },
-    { type: 6, label: `Very Dark`, description: `Never burns, deeply pigmented`, base_minutes: 50, color: `#3d2010` },
-]
+// Fitted constants for reference skin from McKenzie/NIWA table
+const VITD_K = 0.5942279531658679
+const VITD_N = 3.2240022213923023
+const ERYTH_A = 11.680455399889993
+const ERYTH_B = 2.663785759584473
+
 
 /**
- * Get the recommended sun exposure time for a skin type
- * @param {number} skin_type_index - Zero-based index into skin_types array
- * @returns {{ minutes: number, label: string }}
+ * Compute sec(θ) from degrees — atmospheric path length increases with zenith angle.
+ * @param {number} sza_degrees - Solar zenith angle in degrees
+ * @returns {number} Secant of the zenith angle
  */
-export const get_exposure_time = ( skin_type_index ) => {
-
-    const skin = skin_types[ skin_type_index ]
-    return { minutes: skin.base_minutes, label: skin.label }
+function sec_theta( sza_degrees ) {
+    const theta = sza_degrees * ( Math.PI / 180 )
+    return 1 / Math.cos( theta )
 }
 
+
 /**
- * Find the vitamin D season boundaries for a given location and year.
- * The season is the contiguous period where max solar elevation >= 45°.
- * @param {number} lat - Latitude in degrees
- * @param {number} lng - Longitude in degrees
- * @param {number} year - The year to scan
- * @returns {{ first_day: Date|null, last_day: Date|null, total_days: number, year_round: boolean }}
+ * Approximate vitamin D produced (IU) from full-body sun exposure
+ * for a given solar zenith angle, exposure duration, and skin type.
+ * @param {number} sza_degrees - Solar zenith angle in degrees
+ * @param {number} exposure_minutes - Duration of sun exposure in minutes
+ * @param {number} skin_type - Fitzpatrick skin type (1–6)
+ * @param {number} percent_body_exposed - Percentage of body exposed to sun (0–100)
+ * @returns {number} Estimated IU of vitamin D produced
  */
-export const find_vitd_season = ( lat, lng, year ) => {
+export function vitamin_d_iu_produced( sza_degrees, exposure_minutes, skin_type = 2, percent_body_exposed = 100 ) {
 
-    // Check every day of the year for 45°+ solar elevation
-    const qualifying_days = []
+    const skin_factor = SKIN_FACTORS[ skin_type ] ?? 1
 
-    for( let day_of_year = 0; day_of_year < 366; day_of_year++ ) {
+    // Minutes of full-body exposure needed for 1000 IU at this angle and skin type
+    const t_1000_minutes = VITD_K * Math.pow( sec_theta( sza_degrees ), VITD_N ) * skin_factor
 
-        const date = new Date( year, 0, 1 + day_of_year )
-        if( date.getFullYear() !== year ) break
+    // Assume linear production with time at fixed SZA
+    return 1000 * ( exposure_minutes / t_1000_minutes ) * ( percent_body_exposed / 100 )
 
-        const max_el = get_max_elevation( date, lat, lng )
-        if( max_el >= 45 ) qualifying_days.push( date )
-    }
+}
 
-    // No days qualify — permanent vitamin D winter
-    if( qualifying_days.length === 0 ) {
-        return { first_day: null, last_day: null, total_days: 0, year_round: false }
-    }
 
-    // Year-round vitamin D (equatorial regions)
-    const is_leap = new Date( year, 1, 29 ).getDate() === 29
-    const days_in_year = is_leap ? 366 : 365
+/**
+ * Approximate time to sunburn (minutes) for full-body exposure
+ * at a given solar zenith angle and Fitzpatrick skin type.
+ * Based on McKenzie/NIWA erythema model for reference light skin.
+ * @param {number} sza_degrees - Solar zenith angle in degrees
+ * @param {number} skin_type - Fitzpatrick skin type (1–6)
+ * @returns {number} Estimated minutes until erythema
+ */
+export function time_to_erythema( sza_degrees, skin_type = 2 ) {
 
-    if( qualifying_days.length >= days_in_year - 1 ) {
-        return { first_day: qualifying_days[0], last_day: qualifying_days.at( -1 ), total_days: qualifying_days.length, year_round: true }
-    }
+    const skin_factor = SKIN_FACTORS[ skin_type ] ?? 1
 
-    return {
-        first_day: qualifying_days[0],
-        last_day: qualifying_days.at( -1 ),
-        total_days: qualifying_days.length,
-        year_round: false,
-    }
+    // Reference erythema time scaled by skin tolerance
+    return ERYTH_A * Math.pow( sec_theta( sza_degrees ), ERYTH_B ) * skin_factor
+
+}
+
+
+/**
+ * Calculate how many minutes of exposure are needed to produce
+ * a target amount of vitamin D at a given SZA and skin type.
+ * @param {number} sza_degrees - Solar zenith angle in degrees
+ * @param {number} target_iu - Target IU of vitamin D
+ * @param {number} skin_type - Fitzpatrick skin type (1–6)
+ * @param {number} percent_body_exposed - Percentage of body exposed (0–100)
+ * @returns {number} Minutes needed
+ */
+export function minutes_for_target_iu( sza_degrees, target_iu, skin_type = 2, percent_body_exposed = 100 ) {
+
+    const skin_factor = SKIN_FACTORS[ skin_type ] ?? 1
+
+    // Minutes needed for 1000 IU at full body exposure
+    const t_1000 = VITD_K * Math.pow( sec_theta( sza_degrees ), VITD_N ) * skin_factor
+
+    // Scale for target IU and actual body exposure
+    return t_1000 * ( target_iu / 1000 ) / ( percent_body_exposed / 100 )
+
 }

@@ -1,6 +1,6 @@
 {
   "name": "gratis-vitd",
-  "version": "0.5.0",
+  "version": "1.0.0",
   "description": "",
   "license": "MIT",
   "author": "Mentor <mentor@palokaj.co> (http://github.com/actuallymentor)",
@@ -21,8 +21,13 @@
     "vite-plugin-pwa": "^1.2.0"
   },
   "dependencies": {
+    "lucide-react": "^0.577.0",
+    "mentie": "^0.5.4",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "suncalc": "^1.9.0"
+    "recharts": "^3.7.0",
+    "styled-components": "^6.3.11",
+    "suncalc": "^1.9.0",
+    "use-debounce": "^10.1.0"
   }
 }
