@@ -25,7 +25,7 @@ const Modal = styled.div`
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: var(--space-m);
+    gap: var(--space-s);
     position: relative;
 `
 
@@ -47,14 +47,20 @@ const Title = styled.h3`
     padding-right: var(--space-xl);
 `
 
-const TypeRow = styled.div`
+const TypeRow = styled.button`
     display: flex;
     align-items: flex-start;
     gap: var(--space-s);
-    padding: var(--space-s) 0;
+    padding: var(--space-s) var(--space-m);
+    border: 2px solid ${ ( { $selected } ) => $selected ? `var(--accent)` : `transparent` };
+    border-radius: 0.75rem;
+    background: ${ ( { $selected } ) => $selected ? `color-mix(in srgb, var(--accent) 8%, transparent)` : `transparent` };
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s ease;
 
-    &:not(:last-child) {
-        border-bottom: 1px solid var(--border);
+    &:hover {
+        background: color-mix(in srgb, var(--accent) 6%, transparent);
     }
 `
 
@@ -89,10 +95,15 @@ const TypeDescription = styled.span`
 
 
 /**
- * Modal explaining the 6 Fitzpatrick skin types.
- * @param {{ on_close: Function }} props
+ * Modal for selecting and learning about the 6 Fitzpatrick skin types.
+ * @param {{ selected: number, on_select: Function, on_close: Function }} props
  */
-export default function SkinTypeModal( { on_close } ) {
+export default function SkinTypeModal( { selected, on_select, on_close } ) {
+
+    const select_type = ( type ) => {
+        on_select( type )
+        on_close()
+    }
 
     return <Overlay onClick={ on_close }>
         <Modal onClick={ e => e.stopPropagation() }>
@@ -102,7 +113,7 @@ export default function SkinTypeModal( { on_close } ) {
             <Title>Fitzpatrick Skin Types</Title>
 
             { [ 1, 2, 3, 4, 5, 6 ].map( type =>
-                <TypeRow key={ type }>
+                <TypeRow key={ type } $selected={ selected === type } onClick={ () => select_type( type ) }>
                     <Swatch $color={ SWATCH_COLORS[ type ] } />
                     <TypeInfo>
                         <TypeLabel>{ LABELS[ type ] }</TypeLabel>

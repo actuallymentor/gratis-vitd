@@ -3,11 +3,14 @@
 ## [1.2.0] - 2026-03-06
 
 ### Added
-- Skin type explainer modal with Fitzpatrick type descriptions
-- (i) info button next to skin type dropdown on dashboard
+- Clickable skin type label in dashboard opens selection modal
+- Skin type modal with Fitzpatrick descriptions and selectable types
 
 ### Changed
 - Remove skin type selection from onboarding (defaults to type 2)
+
+### Removed
+- SkinTypeDropdown atom (replaced by clickable label + modal)
 
 ## [1.1.0] - 2026-03-06
 

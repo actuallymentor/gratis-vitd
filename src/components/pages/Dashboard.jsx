@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
-import { RotateCcw, Info } from 'lucide-react'
+import { RotateCcw } from 'lucide-react'
 
 import ChartCard from '../molecules/ChartCard'
 import InlineInput from '../atoms/InlineInput'
-import SkinTypeDropdown from '../atoms/SkinTypeDropdown'
 import SkinTypeModal from '../molecules/SkinTypeModal'
+import { LABELS } from '../atoms/SkinTypeOption'
 
 
 const Page = styled.div`
@@ -64,19 +64,23 @@ const LocationLabel = styled.p`
     color: var(--text-muted);
 `
 
-const InfoTrigger = styled.button`
-    display: inline-flex;
-    align-items: center;
+const SkinTypeLink = styled.button`
+    display: inline;
+    font-weight: 700;
+    color: var(--accent-dark);
     background: none;
     border: none;
-    color: var(--text-muted);
-    padding: 0;
-    margin-left: 2px;
+    border-bottom: 2px dashed var(--accent);
+    padding: 0 var(--space-xs);
+    font-size: inherit;
+    line-height: inherit;
     cursor: pointer;
-    vertical-align: middle;
-    transition: color 0.2s ease;
+    transition: border-color 0.2s ease;
 
-    &:hover { color: var(--accent); }
+    &:hover {
+        border-bottom-style: solid;
+        border-color: var(--accent-dark);
+    }
 `
 
 // NIH daily recommended IU for adults
@@ -118,11 +122,11 @@ export default function Dashboard( { settings, update_settings, reset_settings }
         debounced_save( { percent_exposed: clamped } )
     }, [ debounced_save ] )
 
+    // Skin type changes via modal — save immediately (no debounce needed)
     const change_skin = useCallback( ( val ) => {
-        const clamped = Math.max( 1, Math.min( 6, Math.round( val ) ) )
-        set_local_skin( clamped )
-        debounced_save( { skin_type: clamped } )
-    }, [ debounced_save ] )
+        set_local_skin( val )
+        update_settings( { skin_type: val } )
+    }, [ update_settings ] )
 
     const change_iu = useCallback( ( val ) => {
         const clamped = Math.max( 100, Math.min( 10000, val ) )
@@ -150,10 +154,9 @@ export default function Dashboard( { settings, update_settings, reset_settings }
             <SettingsText>
                 Assuming you are{ ` ` }
                 <InlineInput value={ local_exposed } on_change={ change_exposed } min={ 1 } max={ 100 } width="3em" />% exposed to the sun, have skin type{ ` ` }
-                <SkinTypeDropdown value={ local_skin } on_change={ change_skin } />
-                <InfoTrigger onClick={ () => set_show_skin_modal( true ) } aria-label="What are skin types?">
-                    <Info size={ 14 } />
-                </InfoTrigger>, and want to get{ ` ` }
+                <SkinTypeLink onClick={ () => set_show_skin_modal( true ) }>
+                    { LABELS[ local_skin ] }
+                </SkinTypeLink>, and want to get{ ` ` }
                 <InlineInput value={ local_iu } on_change={ change_iu } min={ 100 } max={ 10000 } width="4em" /> IU of vitamin D which is{ ` ` }
                 <strong>{ daily_percent }%</strong> of the daily recommended amount.
             </SettingsText>
@@ -169,7 +172,11 @@ export default function Dashboard( { settings, update_settings, reset_settings }
         </Container>
 
         { /* Skin type explainer modal */ }
-        { show_skin_modal && <SkinTypeModal on_close={ () => set_show_skin_modal( false ) } /> }
+        { show_skin_modal && <SkinTypeModal
+            selected={ local_skin }
+            on_select={ change_skin }
+            on_close={ () => set_show_skin_modal( false ) }
+        /> }
 
     </Page>
 
