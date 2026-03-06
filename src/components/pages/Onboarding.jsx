@@ -79,7 +79,7 @@ export default function Onboarding( { settings, update_settings } ) {
             <Title>Vitamin D Calculator</Title>
 
             <Subtitle>
-                Check at what times of the day the sun is strong enough for you to generate vitamin D.
+                Check how long you need to tan to get your fill of vitamin D today.
             </Subtitle>
 
             { /* Location section */ }

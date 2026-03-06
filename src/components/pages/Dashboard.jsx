@@ -5,6 +5,7 @@ import { RotateCcw } from 'lucide-react'
 
 import ChartCard from '../molecules/ChartCard'
 import InlineInput from '../atoms/InlineInput'
+import SkinTypeDropdown from '../atoms/SkinTypeDropdown'
 
 
 const Page = styled.div`
@@ -91,6 +92,9 @@ export default function Dashboard( { settings, update_settings, reset_settings }
         update_settings( updates )
     }, 3000 )
 
+    // Flush any pending debounced save on unmount (prevents lost changes)
+    useEffect( () => () => debounced_save.flush(), [ debounced_save ] )
+
     const change_exposed = useCallback( ( val ) => {
         const clamped = Math.max( 1, Math.min( 100, val ) )
         set_local_exposed( clamped )
@@ -129,7 +133,7 @@ export default function Dashboard( { settings, update_settings, reset_settings }
             <SettingsText>
                 Assuming you are{ ` ` }
                 <InlineInput value={ local_exposed } on_change={ change_exposed } min={ 1 } max={ 100 } width="3em" />% exposed to the sun, have skin type{ ` ` }
-                <InlineInput value={ local_skin } on_change={ change_skin } min={ 1 } max={ 6 } width="2em" />, and want to get{ ` ` }
+                <SkinTypeDropdown value={ local_skin } on_change={ change_skin } />, and want to get{ ` ` }
                 <InlineInput value={ local_iu } on_change={ change_iu } min={ 100 } max={ 10000 } width="4em" /> IU of vitamin D which is{ ` ` }
                 <strong>{ daily_percent }%</strong> of the daily recommended amount.
             </SettingsText>

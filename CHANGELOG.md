@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.0] - 2026-03-06
+
+### Added
+- Skin type dropdown with labels in dashboard settings sentence
+- Info tooltip icons on onboarding skin type cards with Fitzpatrick descriptions
+
+### Fixed
+- Dashboard inline settings lost on navigation/refresh before 3s debounce fired
+
 ## [1.0.0] - 2026-03-06
 
 ### Added
