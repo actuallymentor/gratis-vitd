@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.2.0] - 2026-03-06
+
+### Added
+- Skin type explainer modal with Fitzpatrick type descriptions
+- (i) info button next to skin type dropdown on dashboard
+
+### Changed
+- Remove skin type selection from onboarding (defaults to type 2)
+
 ## [1.1.0] - 2026-03-06
 
 ### Added

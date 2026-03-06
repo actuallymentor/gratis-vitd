@@ -4,7 +4,6 @@ import { Sun } from 'lucide-react'
 
 import { use_geolocation } from '../../hooks/use_geolocation'
 import LocationPicker from '../molecules/LocationPicker'
-import SkinTypeSelector from '../molecules/SkinTypeSelector'
 
 
 const Page = styled.div`
@@ -49,7 +48,7 @@ const SectionLabel = styled.h3`
 
 
 /**
- * Onboarding page: location + skin type selection.
+ * Onboarding page: location selection.
  * @param {{ settings: Object, update_settings: Function }} props
  */
 export default function Onboarding( { settings, update_settings } ) {
@@ -65,10 +64,6 @@ export default function Onboarding( { settings, update_settings } ) {
 
     const select_location = ( lat, lng, name ) => {
         update_settings( { lat, lng, location_name: name } )
-    }
-
-    const select_skin_type = ( type ) => {
-        update_settings( { skin_type: type } )
     }
 
     return <Page>
@@ -93,14 +88,6 @@ export default function Onboarding( { settings, update_settings } ) {
                 geo_error={ error }
                 request_location={ request_location }
             /> }
-
-            { /* Skin type section */ }
-            <SectionLabel>Your skin type</SectionLabel>
-
-            <SkinTypeSelector
-                selected={ settings.skin_type }
-                on_select={ select_skin_type }
-            />
 
         </Container>
     </Page>

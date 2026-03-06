@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
-import { RotateCcw } from 'lucide-react'
+import { RotateCcw, Info } from 'lucide-react'
 
 import ChartCard from '../molecules/ChartCard'
 import InlineInput from '../atoms/InlineInput'
 import SkinTypeDropdown from '../atoms/SkinTypeDropdown'
+import SkinTypeModal from '../molecules/SkinTypeModal'
 
 
 const Page = styled.div`
@@ -63,6 +64,21 @@ const LocationLabel = styled.p`
     color: var(--text-muted);
 `
 
+const InfoTrigger = styled.button`
+    display: inline-flex;
+    align-items: center;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    padding: 0;
+    margin-left: 2px;
+    cursor: pointer;
+    vertical-align: middle;
+    transition: color 0.2s ease;
+
+    &:hover { color: var(--accent); }
+`
+
 // NIH daily recommended IU for adults
 const DAILY_RECOMMENDED_IU = 600
 
@@ -79,6 +95,7 @@ export default function Dashboard( { settings, update_settings, reset_settings }
     const [ local_exposed, set_local_exposed ] = useState( percent_exposed )
     const [ local_skin, set_local_skin ] = useState( skin_type )
     const [ local_iu, set_local_iu ] = useState( target_iu )
+    const [ show_skin_modal, set_show_skin_modal ] = useState( false )
 
     // Sync local state when settings change externally (e.g. reset)
     useEffect( () => {
@@ -133,7 +150,10 @@ export default function Dashboard( { settings, update_settings, reset_settings }
             <SettingsText>
                 Assuming you are{ ` ` }
                 <InlineInput value={ local_exposed } on_change={ change_exposed } min={ 1 } max={ 100 } width="3em" />% exposed to the sun, have skin type{ ` ` }
-                <SkinTypeDropdown value={ local_skin } on_change={ change_skin } />, and want to get{ ` ` }
+                <SkinTypeDropdown value={ local_skin } on_change={ change_skin } />
+                <InfoTrigger onClick={ () => set_show_skin_modal( true ) } aria-label="What are skin types?">
+                    <Info size={ 14 } />
+                </InfoTrigger>, and want to get{ ` ` }
                 <InlineInput value={ local_iu } on_change={ change_iu } min={ 100 } max={ 10000 } width="4em" /> IU of vitamin D which is{ ` ` }
                 <strong>{ daily_percent }%</strong> of the daily recommended amount.
             </SettingsText>
@@ -147,6 +167,10 @@ export default function Dashboard( { settings, update_settings, reset_settings }
             </ButtonRow>
 
         </Container>
+
+        { /* Skin type explainer modal */ }
+        { show_skin_modal && <SkinTypeModal on_close={ () => set_show_skin_modal( false ) } /> }
+
     </Page>
 
 }
