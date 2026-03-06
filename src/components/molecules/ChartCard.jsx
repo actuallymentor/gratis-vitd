@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState, useCallback } from 'react'
 import styled from 'styled-components'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 
@@ -54,14 +54,22 @@ export default function ChartCard( { lat, lng, skin_type, percent_exposed, targe
     </Card>
 
 
-    // Show every ~4th label to avoid crowding
-    const tick_interval = Math.max( 1, Math.floor( chart_data.length / 12 ) )
+    // Track container width to adapt tick density
+    const [ chart_width, set_chart_width ] = useState( 600 )
+    const handle_resize = useCallback( ( w ) => {
+        if( w ) set_chart_width( w ) 
+    }, [] )
+
+    // Fewer labels on narrow screens to prevent overlap
+    const target_ticks = chart_width < 400 ? 4 : chart_width < 600 ? 6 : 12
+    const tick_interval = Math.max( 1, Math.floor( chart_data.length / target_ticks ) )
+    const tick_font_size = chart_width < 400 ? 10 : 12
 
     return <Card>
 
         <ChartTitle>Sun exposure today</ChartTitle>
 
-        <ResponsiveContainer width="100%" height={ 320 }>
+        <ResponsiveContainer width="100%" height={ 320 } onResize={ handle_resize }>
             <LineChart data={ chart_data } margin={ { top: 5, right: 20, left: 0, bottom: 5 } }>
 
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
@@ -69,8 +77,11 @@ export default function ChartCard( { lat, lng, skin_type, percent_exposed, targe
                 <XAxis
                     dataKey="time"
                     interval={ tick_interval }
-                    tick={ { fontSize: 12 } }
+                    tick={ { fontSize: tick_font_size } }
                     stroke="var(--text-muted)"
+                    angle={ chart_width < 400 ? -45 : 0 }
+                    textAnchor={ chart_width < 400 ? `end` : `middle` }
+                    height={ chart_width < 400 ? 50 : 30 }
                 />
 
                 <YAxis
