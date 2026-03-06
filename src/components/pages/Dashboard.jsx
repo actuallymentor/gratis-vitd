@@ -190,7 +190,7 @@ export default function Dashboard( { settings, update_settings, reset_settings }
             <ButtonRow>
                 <IconButton onClick={ reset_settings }>
                     <RotateCcw size={ 14 } />
-                    Change location
+                    Reset location & settings
                 </IconButton>
             </ButtonRow>
 
