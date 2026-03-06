@@ -6,6 +6,7 @@ import { RotateCcw } from 'lucide-react'
 import ChartCard from '../molecules/ChartCard'
 import InlineInput from '../atoms/InlineInput'
 import SkinTypeModal from '../molecules/SkinTypeModal'
+import ExposureModal, { exposure_label } from '../molecules/ExposureModal'
 import { LABELS } from '../atoms/SkinTypeOption'
 
 
@@ -100,6 +101,7 @@ export default function Dashboard( { settings, update_settings, reset_settings }
     const [ local_skin, set_local_skin ] = useState( skin_type )
     const [ local_iu, set_local_iu ] = useState( target_iu )
     const [ show_skin_modal, set_show_skin_modal ] = useState( false )
+    const [ show_exposure_modal, set_show_exposure_modal ] = useState( false )
 
     // Sync local state when settings change externally (e.g. reset)
     useEffect( () => {
@@ -116,11 +118,11 @@ export default function Dashboard( { settings, update_settings, reset_settings }
     // Flush any pending debounced save on unmount (prevents lost changes)
     useEffect( () => () => debounced_save.flush(), [ debounced_save ] )
 
+    // Exposure changes via modal — save immediately
     const change_exposed = useCallback( ( val ) => {
-        const clamped = Math.max( 1, Math.min( 100, val ) )
-        set_local_exposed( clamped )
-        debounced_save( { percent_exposed: clamped } )
-    }, [ debounced_save ] )
+        set_local_exposed( val )
+        update_settings( { percent_exposed: val } )
+    }, [ update_settings ] )
 
     // Skin type changes via modal — save immediately (no debounce needed)
     const change_skin = useCallback( ( val ) => {
@@ -152,12 +154,14 @@ export default function Dashboard( { settings, update_settings, reset_settings }
 
             { /* Inline settings sentence */ }
             <SettingsText>
-                Assuming you are{ ` ` }
-                <InlineInput value={ local_exposed } on_change={ change_exposed } min={ 1 } max={ 100 } width="3em" />% exposed to the sun, have skin type{ ` ` }
+                Assuming{ ` ` }
+                <SkinTypeLink onClick={ () => set_show_exposure_modal( true ) }>
+                    { exposure_label( local_exposed ) }
+                </SkinTypeLink>{ ` ` }to the sun, skin type{ ` ` }
                 <SkinTypeLink onClick={ () => set_show_skin_modal( true ) }>
                     { LABELS[ local_skin ] }
-                </SkinTypeLink>, and want to get{ ` ` }
-                <InlineInput value={ local_iu } on_change={ change_iu } min={ 100 } max={ 10000 } width="4em" /> IU of vitamin D which is{ ` ` }
+                </SkinTypeLink>, and a target of{ ` ` }
+                <InlineInput value={ local_iu } on_change={ change_iu } min={ 100 } max={ 10000 } width="4em" /> IU which is{ ` ` }
                 <strong>{ daily_percent }%</strong> of the daily recommended amount.
             </SettingsText>
 
@@ -171,7 +175,14 @@ export default function Dashboard( { settings, update_settings, reset_settings }
 
         </Container>
 
-        { /* Skin type explainer modal */ }
+        { /* Exposure selection modal */ }
+        { show_exposure_modal && <ExposureModal
+            selected={ local_exposed }
+            on_select={ change_exposed }
+            on_close={ () => set_show_exposure_modal( false ) }
+        /> }
+
+        { /* Skin type selection modal */ }
         { show_skin_modal && <SkinTypeModal
             selected={ local_skin }
             on_select={ change_skin }
