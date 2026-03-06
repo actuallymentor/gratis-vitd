@@ -6,7 +6,7 @@ const DEFAULTS = {
     lat: null,
     lng: null,
     skin_type: 2,
-    percent_exposed: 25,
+    percent_exposed: 27,
     target_iu: 1000,
     location_name: ``,
 }

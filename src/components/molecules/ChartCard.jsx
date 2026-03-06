@@ -20,6 +20,18 @@ const ChartTitle = styled.h2`
     font-weight: 600;
 `
 
+const SolarNoonText = styled.p`
+    margin-top: var(--space-m);
+    text-align: center;
+    font-size: 0.9em;
+    color: var(--text-muted);
+    line-height: 1.6;
+`
+
+const Highlight = styled.strong`
+    color: var(--accent-dark);
+`
+
 
 /**
  * Line chart showing minutes-to-target-IU and time-to-erythema across the day.
@@ -45,6 +57,20 @@ export default function ChartCard( { lat, lng, skin_type, percent_exposed, targe
         } )
 
     }, [ lat, lng, skin_type, percent_exposed, target_iu ] )
+
+    // Solar noon = point with lowest SZA (sun highest in sky)
+    const solar_noon = useMemo( () => {
+
+        const solar_data = get_day_solar_data( lat, lng )
+        if( !solar_data.length ) return null
+
+        const peak = solar_data.reduce( ( best, s ) => s.sza_degrees < best.sza_degrees ? s : best )
+        const noon_label = peak.time.toLocaleTimeString( [], { hour: `2-digit`, minute: `2-digit`, hour12: false } )
+        const noon_minutes = Math.round( minutes_for_target_iu( peak.sza_degrees, target_iu, skin_type, percent_exposed ) )
+
+        return { time: noon_label, minutes: noon_minutes }
+
+    }, [ lat, lng, target_iu, skin_type, percent_exposed ] )
 
 
     if( !chart_data.length ) return <Card>
@@ -126,6 +152,10 @@ export default function ChartCard( { lat, lng, skin_type, percent_exposed, targe
 
             </LineChart>
         </ResponsiveContainer>
+
+        { solar_noon && <SolarNoonText>
+            Solar noon is at <Highlight>{ solar_noon.time }</Highlight> — at that time it takes <Highlight>{ solar_noon.minutes } min</Highlight> of tanning to get your vitamin D.
+        </SolarNoonText> }
 
     </Card>
 
