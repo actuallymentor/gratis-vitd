@@ -108,10 +108,10 @@ export default function Dashboard( { settings, update_settings, reset_settings }
         set_local_iu( target_iu )
     }, [ percent_exposed, skin_type, target_iu ] )
 
-    // Debounced save — 3 seconds
+    // Debounced save — 500ms
     const debounced_save = useDebouncedCallback( ( updates ) => {
         update_settings( updates )
-    }, 3000 )
+    }, 500 )
 
     // Flush any pending debounced save on unmount (prevents lost changes)
     useEffect( () => () => debounced_save.flush(), [ debounced_save ] )
