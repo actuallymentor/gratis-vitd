@@ -81,15 +81,15 @@ const SkinTypeLink = styled.button`
     }
 `
 
-const SolarNoonText = styled.p`
+const SolarNoonHeading = styled.h2`
     text-align: center;
-    font-size: 0.95em;
-    color: var(--text-muted);
-    line-height: 1.6;
+    font-weight: 700;
 `
 
-const Highlight = styled.strong`
-    color: var(--accent-dark);
+const SolarNoonSub = styled.p`
+    text-align: center;
+    color: var(--text-muted);
+    line-height: 1.6;
 `
 
 // NIH daily recommended IU for adults
@@ -160,9 +160,10 @@ export default function Dashboard( { settings, update_settings, reset_settings }
         <Container>
 
             { /* Solar noon summary */ }
-            { solar_noon && <SolarNoonText>
-                Solar noon is at <Highlight>{ solar_noon.time }</Highlight> — at that time it takes <Highlight>{ solar_noon.minutes } min</Highlight> of tanning to get your vitamin D.
-            </SolarNoonText> }
+            { solar_noon && <>
+                <SolarNoonHeading>Solar noon is at { solar_noon.time }</SolarNoonHeading>
+                <SolarNoonSub>At that time it takes { solar_noon.minutes } min of tanning to get your vitamin D.</SolarNoonSub>
+            </> }
 
             { /* Chart */ }
             <ChartCard
