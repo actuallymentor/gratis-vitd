@@ -99,6 +99,9 @@ const CityList = styled.div`
 `
 
 const CityItem = styled.button`
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
     padding: var(--space-s) var(--space-m);
     border: none;
     background: transparent;
@@ -109,6 +112,11 @@ const CityItem = styled.button`
 
     &:hover { background: color-mix(in srgb, var(--accent) 10%, white); }
     & + & { border-top: 1px solid var(--border); }
+`
+
+const LocationIcon = styled.span`
+    font-size: 0.85em;
+    flex-shrink: 0;
 `
 
 const ConfirmButton = styled.button`
@@ -141,76 +149,154 @@ const SearchRow = styled.div`
 `
 
 
-/* ── Well-known city coordinates ────────────────── */
+/* ── Location entries: cities + countries ──────── */
 
-const CITY_COORDS = {
-    'Europe/London': { lat: 51.51, lng: -0.13 },
-    'Europe/Paris': { lat: 48.86, lng: 2.35 },
-    'Europe/Berlin': { lat: 52.52, lng: 13.41 },
-    'Europe/Madrid': { lat: 40.42, lng: -3.70 },
-    'Europe/Rome': { lat: 41.90, lng: 12.50 },
-    'Europe/Amsterdam': { lat: 52.37, lng: 4.90 },
-    'Europe/Stockholm': { lat: 59.33, lng: 18.07 },
-    'Europe/Oslo': { lat: 59.91, lng: 10.75 },
-    'Europe/Helsinki': { lat: 60.17, lng: 24.94 },
-    'Europe/Athens': { lat: 37.98, lng: 23.73 },
-    'Europe/Istanbul': { lat: 41.01, lng: 28.98 },
-    'Europe/Moscow': { lat: 55.76, lng: 37.62 },
-    'Europe/Lisbon': { lat: 38.72, lng: -9.14 },
-    'Europe/Vienna': { lat: 48.21, lng: 16.37 },
-    'Europe/Zurich': { lat: 47.38, lng: 8.54 },
-    'Europe/Warsaw': { lat: 52.23, lng: 21.01 },
-    'Europe/Prague': { lat: 50.08, lng: 14.44 },
-    'Europe/Budapest': { lat: 47.50, lng: 19.04 },
-    'Europe/Dublin': { lat: 53.35, lng: -6.26 },
-    'Europe/Brussels': { lat: 50.85, lng: 4.35 },
-    'Europe/Copenhagen': { lat: 55.68, lng: 12.57 },
-    'America/New_York': { lat: 40.71, lng: -74.01 },
-    'America/Chicago': { lat: 41.88, lng: -87.63 },
-    'America/Denver': { lat: 39.74, lng: -104.99 },
-    'America/Los_Angeles': { lat: 34.05, lng: -118.24 },
-    'America/Toronto': { lat: 43.65, lng: -79.38 },
-    'America/Mexico_City': { lat: 19.43, lng: -99.13 },
-    'America/Sao_Paulo': { lat: -23.55, lng: -46.63 },
-    'America/Buenos_Aires': { lat: -34.60, lng: -58.38 },
-    'America/Bogota': { lat: 4.71, lng: -74.07 },
-    'America/Lima': { lat: -12.05, lng: -77.04 },
-    'America/Santiago': { lat: -33.45, lng: -70.67 },
-    'America/Anchorage': { lat: 61.22, lng: -149.90 },
-    'Pacific/Honolulu': { lat: 21.31, lng: -157.86 },
-    'Asia/Tokyo': { lat: 35.68, lng: 139.69 },
-    'Asia/Shanghai': { lat: 31.23, lng: 121.47 },
-    'Asia/Hong_Kong': { lat: 22.32, lng: 114.17 },
-    'Asia/Singapore': { lat: 1.35, lng: 103.82 },
-    'Asia/Dubai': { lat: 25.20, lng: 55.27 },
-    'Asia/Kolkata': { lat: 22.57, lng: 88.36 },
-    'Asia/Seoul': { lat: 37.57, lng: 126.98 },
-    'Asia/Bangkok': { lat: 13.76, lng: 100.50 },
-    'Asia/Jakarta': { lat: -6.21, lng: 106.85 },
-    'Asia/Taipei': { lat: 25.03, lng: 121.57 },
-    'Asia/Manila': { lat: 14.60, lng: 120.98 },
-    'Asia/Karachi': { lat: 24.86, lng: 67.01 },
-    'Asia/Tehran': { lat: 35.69, lng: 51.39 },
-    'Asia/Riyadh': { lat: 24.71, lng: 46.67 },
-    'Africa/Cairo': { lat: 30.04, lng: 31.24 },
-    'Africa/Lagos': { lat: 6.52, lng: 3.38 },
-    'Africa/Johannesburg': { lat: -26.20, lng: 28.04 },
-    'Africa/Nairobi': { lat: -1.29, lng: 36.82 },
-    'Africa/Casablanca': { lat: 33.57, lng: -7.59 },
-    'Australia/Sydney': { lat: -33.87, lng: 151.21 },
-    'Australia/Melbourne': { lat: -37.81, lng: 144.96 },
-    'Pacific/Auckland': { lat: -36.85, lng: 174.76 },
-}
+// Each entry: { name, lat, lng, type }
+// Countries use coordinates from their primary timezone capital
+const LOCATIONS = [
 
+    // ── Countries ────────────────────────────────
+    { name: `Afghanistan`, lat: 34.53, lng: 69.17, type: `country` },
+    { name: `Algeria`, lat: 36.75, lng: 3.04, type: `country` },
+    { name: `Argentina`, lat: -34.60, lng: -58.38, type: `country` },
+    { name: `Australia`, lat: -33.87, lng: 151.21, type: `country` },
+    { name: `Austria`, lat: 48.21, lng: 16.37, type: `country` },
+    { name: `Bangladesh`, lat: 23.81, lng: 90.41, type: `country` },
+    { name: `Belgium`, lat: 50.85, lng: 4.35, type: `country` },
+    { name: `Bolivia`, lat: -16.50, lng: -68.15, type: `country` },
+    { name: `Brazil`, lat: -23.55, lng: -46.63, type: `country` },
+    { name: `Canada`, lat: 43.65, lng: -79.38, type: `country` },
+    { name: `Chile`, lat: -33.45, lng: -70.67, type: `country` },
+    { name: `China`, lat: 31.23, lng: 121.47, type: `country` },
+    { name: `Colombia`, lat: 4.71, lng: -74.07, type: `country` },
+    { name: `Costa Rica`, lat: 9.93, lng: -84.08, type: `country` },
+    { name: `Croatia`, lat: 45.81, lng: 15.98, type: `country` },
+    { name: `Cuba`, lat: 23.11, lng: -82.37, type: `country` },
+    { name: `Czech Republic`, lat: 50.08, lng: 14.44, type: `country` },
+    { name: `Denmark`, lat: 55.68, lng: 12.57, type: `country` },
+    { name: `Ecuador`, lat: -0.18, lng: -78.47, type: `country` },
+    { name: `Egypt`, lat: 30.04, lng: 31.24, type: `country` },
+    { name: `Ethiopia`, lat: 9.02, lng: 38.75, type: `country` },
+    { name: `Finland`, lat: 60.17, lng: 24.94, type: `country` },
+    { name: `France`, lat: 48.86, lng: 2.35, type: `country` },
+    { name: `Germany`, lat: 52.52, lng: 13.41, type: `country` },
+    { name: `Ghana`, lat: 5.56, lng: -0.19, type: `country` },
+    { name: `Greece`, lat: 37.98, lng: 23.73, type: `country` },
+    { name: `Guatemala`, lat: 14.63, lng: -90.51, type: `country` },
+    { name: `Hungary`, lat: 47.50, lng: 19.04, type: `country` },
+    { name: `Iceland`, lat: 64.15, lng: -21.94, type: `country` },
+    { name: `India`, lat: 28.61, lng: 77.21, type: `country` },
+    { name: `Indonesia`, lat: -6.21, lng: 106.85, type: `country` },
+    { name: `Iran`, lat: 35.69, lng: 51.39, type: `country` },
+    { name: `Iraq`, lat: 33.31, lng: 44.37, type: `country` },
+    { name: `Ireland`, lat: 53.35, lng: -6.26, type: `country` },
+    { name: `Israel`, lat: 31.77, lng: 35.22, type: `country` },
+    { name: `Italy`, lat: 41.90, lng: 12.50, type: `country` },
+    { name: `Jamaica`, lat: 18.11, lng: -76.80, type: `country` },
+    { name: `Japan`, lat: 35.68, lng: 139.69, type: `country` },
+    { name: `Jordan`, lat: 31.95, lng: 35.93, type: `country` },
+    { name: `Kenya`, lat: -1.29, lng: 36.82, type: `country` },
+    { name: `Kuwait`, lat: 29.38, lng: 47.99, type: `country` },
+    { name: `Lebanon`, lat: 33.89, lng: 35.50, type: `country` },
+    { name: `Malaysia`, lat: 3.14, lng: 101.69, type: `country` },
+    { name: `Mexico`, lat: 19.43, lng: -99.13, type: `country` },
+    { name: `Morocco`, lat: 33.57, lng: -7.59, type: `country` },
+    { name: `Myanmar`, lat: 16.87, lng: 96.20, type: `country` },
+    { name: `Nepal`, lat: 27.72, lng: 85.32, type: `country` },
+    { name: `Netherlands`, lat: 52.37, lng: 4.90, type: `country` },
+    { name: `New Zealand`, lat: -36.85, lng: 174.76, type: `country` },
+    { name: `Nigeria`, lat: 6.52, lng: 3.38, type: `country` },
+    { name: `Norway`, lat: 59.91, lng: 10.75, type: `country` },
+    { name: `Pakistan`, lat: 24.86, lng: 67.01, type: `country` },
+    { name: `Panama`, lat: 8.98, lng: -79.52, type: `country` },
+    { name: `Paraguay`, lat: -25.26, lng: -57.58, type: `country` },
+    { name: `Peru`, lat: -12.05, lng: -77.04, type: `country` },
+    { name: `Philippines`, lat: 14.60, lng: 120.98, type: `country` },
+    { name: `Poland`, lat: 52.23, lng: 21.01, type: `country` },
+    { name: `Portugal`, lat: 38.72, lng: -9.14, type: `country` },
+    { name: `Qatar`, lat: 25.29, lng: 51.53, type: `country` },
+    { name: `Romania`, lat: 44.43, lng: 26.10, type: `country` },
+    { name: `Russia`, lat: 55.76, lng: 37.62, type: `country` },
+    { name: `Saudi Arabia`, lat: 24.71, lng: 46.67, type: `country` },
+    { name: `Singapore`, lat: 1.35, lng: 103.82, type: `country` },
+    { name: `South Africa`, lat: -26.20, lng: 28.04, type: `country` },
+    { name: `South Korea`, lat: 37.57, lng: 126.98, type: `country` },
+    { name: `Spain`, lat: 40.42, lng: -3.70, type: `country` },
+    { name: `Sri Lanka`, lat: 6.93, lng: 79.84, type: `country` },
+    { name: `Sweden`, lat: 59.33, lng: 18.07, type: `country` },
+    { name: `Switzerland`, lat: 47.38, lng: 8.54, type: `country` },
+    { name: `Taiwan`, lat: 25.03, lng: 121.57, type: `country` },
+    { name: `Tanzania`, lat: -6.79, lng: 39.28, type: `country` },
+    { name: `Thailand`, lat: 13.76, lng: 100.50, type: `country` },
+    { name: `Tunisia`, lat: 36.81, lng: 10.17, type: `country` },
+    { name: `Turkey`, lat: 41.01, lng: 28.98, type: `country` },
+    { name: `UAE`, lat: 25.20, lng: 55.27, type: `country` },
+    { name: `Uganda`, lat: 0.35, lng: 32.58, type: `country` },
+    { name: `Ukraine`, lat: 50.45, lng: 30.52, type: `country` },
+    { name: `United Kingdom`, lat: 51.51, lng: -0.13, type: `country` },
+    { name: `United States`, lat: 40.71, lng: -74.01, type: `country` },
+    { name: `Uruguay`, lat: -34.91, lng: -56.19, type: `country` },
+    { name: `Venezuela`, lat: 10.49, lng: -66.88, type: `country` },
+    { name: `Vietnam`, lat: 21.03, lng: 105.85, type: `country` },
 
-/**
- * Extract a friendly city name from a timezone ID.
- * @param {string} tz - e.g. "America/New_York"
- * @returns {string} e.g. "New York"
- */
-function tz_to_city( tz ) {
-    return tz.split( `/` ).pop().replace( /_/g, ` ` )
-}
+    // ── Cities ───────────────────────────────────
+    { name: `London`, lat: 51.51, lng: -0.13, type: `city` },
+    { name: `Paris`, lat: 48.86, lng: 2.35, type: `city` },
+    { name: `Berlin`, lat: 52.52, lng: 13.41, type: `city` },
+    { name: `Madrid`, lat: 40.42, lng: -3.70, type: `city` },
+    { name: `Rome`, lat: 41.90, lng: 12.50, type: `city` },
+    { name: `Amsterdam`, lat: 52.37, lng: 4.90, type: `city` },
+    { name: `Stockholm`, lat: 59.33, lng: 18.07, type: `city` },
+    { name: `Oslo`, lat: 59.91, lng: 10.75, type: `city` },
+    { name: `Helsinki`, lat: 60.17, lng: 24.94, type: `city` },
+    { name: `Athens`, lat: 37.98, lng: 23.73, type: `city` },
+    { name: `Istanbul`, lat: 41.01, lng: 28.98, type: `city` },
+    { name: `Moscow`, lat: 55.76, lng: 37.62, type: `city` },
+    { name: `Lisbon`, lat: 38.72, lng: -9.14, type: `city` },
+    { name: `Vienna`, lat: 48.21, lng: 16.37, type: `city` },
+    { name: `Zurich`, lat: 47.38, lng: 8.54, type: `city` },
+    { name: `Warsaw`, lat: 52.23, lng: 21.01, type: `city` },
+    { name: `Prague`, lat: 50.08, lng: 14.44, type: `city` },
+    { name: `Budapest`, lat: 47.50, lng: 19.04, type: `city` },
+    { name: `Dublin`, lat: 53.35, lng: -6.26, type: `city` },
+    { name: `Brussels`, lat: 50.85, lng: 4.35, type: `city` },
+    { name: `Copenhagen`, lat: 55.68, lng: 12.57, type: `city` },
+    { name: `New York`, lat: 40.71, lng: -74.01, type: `city` },
+    { name: `Chicago`, lat: 41.88, lng: -87.63, type: `city` },
+    { name: `Denver`, lat: 39.74, lng: -104.99, type: `city` },
+    { name: `Los Angeles`, lat: 34.05, lng: -118.24, type: `city` },
+    { name: `Toronto`, lat: 43.65, lng: -79.38, type: `city` },
+    { name: `Mexico City`, lat: 19.43, lng: -99.13, type: `city` },
+    { name: `São Paulo`, lat: -23.55, lng: -46.63, type: `city` },
+    { name: `Buenos Aires`, lat: -34.60, lng: -58.38, type: `city` },
+    { name: `Bogotá`, lat: 4.71, lng: -74.07, type: `city` },
+    { name: `Lima`, lat: -12.05, lng: -77.04, type: `city` },
+    { name: `Santiago`, lat: -33.45, lng: -70.67, type: `city` },
+    { name: `Anchorage`, lat: 61.22, lng: -149.90, type: `city` },
+    { name: `Honolulu`, lat: 21.31, lng: -157.86, type: `city` },
+    { name: `Tokyo`, lat: 35.68, lng: 139.69, type: `city` },
+    { name: `Shanghai`, lat: 31.23, lng: 121.47, type: `city` },
+    { name: `Hong Kong`, lat: 22.32, lng: 114.17, type: `city` },
+    { name: `Singapore`, lat: 1.35, lng: 103.82, type: `city` },
+    { name: `Dubai`, lat: 25.20, lng: 55.27, type: `city` },
+    { name: `Kolkata`, lat: 22.57, lng: 88.36, type: `city` },
+    { name: `Seoul`, lat: 37.57, lng: 126.98, type: `city` },
+    { name: `Bangkok`, lat: 13.76, lng: 100.50, type: `city` },
+    { name: `Jakarta`, lat: -6.21, lng: 106.85, type: `city` },
+    { name: `Taipei`, lat: 25.03, lng: 121.57, type: `city` },
+    { name: `Manila`, lat: 14.60, lng: 120.98, type: `city` },
+    { name: `Karachi`, lat: 24.86, lng: 67.01, type: `city` },
+    { name: `Tehran`, lat: 35.69, lng: 51.39, type: `city` },
+    { name: `Riyadh`, lat: 24.71, lng: 46.67, type: `city` },
+    { name: `Cairo`, lat: 30.04, lng: 31.24, type: `city` },
+    { name: `Lagos`, lat: 6.52, lng: 3.38, type: `city` },
+    { name: `Johannesburg`, lat: -26.20, lng: 28.04, type: `city` },
+    { name: `Nairobi`, lat: -1.29, lng: 36.82, type: `city` },
+    { name: `Casablanca`, lat: 33.57, lng: -7.59, type: `city` },
+    { name: `Sydney`, lat: -33.87, lng: 151.21, type: `city` },
+    { name: `Melbourne`, lat: -37.81, lng: 144.96, type: `city` },
+    { name: `Auckland`, lat: -36.85, lng: 174.76, type: `city` },
+]
 
 
 /**
@@ -226,20 +312,20 @@ export default function LocationPicker( { on_select, geo_loading, geo_error, req
     const [ coord_lat, set_coord_lat ] = useState( `` )
     const [ coord_lng, set_coord_lng ] = useState( `` )
 
-    // Only show cities we have known coordinates for
-    const city_keys = useMemo( () => Object.keys( CITY_COORDS ), [] )
-
-    // Filter cities by search query
-    const filtered_cities = useMemo( () => {
-        if( !search.trim() ) return city_keys
+    // Filter locations by search query — countries first, then cities
+    const filtered_locations = useMemo( () => {
+        const sorted = [ ...LOCATIONS ].sort( ( a, b ) => {
+            if( a.type !== b.type ) return a.type === `country` ? -1 : 1
+            return a.name.localeCompare( b.name )
+        } )
+        if( !search.trim() ) return sorted
         const q = search.toLowerCase()
-        return city_keys.filter( tz => tz.toLowerCase().includes( q ) )
-    }, [ search, city_keys ] )
+        return sorted.filter( loc => loc.name.toLowerCase().includes( q ) )
+    }, [ search ] )
 
-    const select_city = ( tz ) => {
-        const { lat, lng } = CITY_COORDS[ tz ]
-        log.info( `City selected:`, tz, lat, lng )
-        on_select( lat, lng, tz_to_city( tz ) )
+    const select_location = ( loc ) => {
+        log.info( `Location selected:`, loc.name, loc.lat, loc.lng )
+        on_select( loc.lat, loc.lng, loc.name )
         set_modal_open( false )
     }
 
@@ -288,16 +374,17 @@ export default function LocationPicker( { on_select, geo_loading, geo_error, req
                         <Search />
                         <input
                             type="text"
-                            placeholder="Search cities..."
+                            placeholder="Search countries or cities..."
                             value={ search }
                             onChange={ e => set_search( e.target.value ) }
                             autoFocus
                         />
                     </SearchRow>
                     <CityList>
-                        { filtered_cities.map( tz =>
-                            <CityItem key={ tz } onClick={ () => select_city( tz ) }>
-                                { tz_to_city( tz ) }
+                        { filtered_locations.map( loc =>
+                            <CityItem key={ `${ loc.type }-${ loc.name }` } onClick={ () => select_location( loc ) }>
+                                <LocationIcon>{ loc.type === `country` ? `🌍` : `📍` }</LocationIcon>
+                                { loc.name }
                             </CityItem>
                         ) }
                     </CityList>
