@@ -8,6 +8,7 @@
 
 ### Changed
 - deploy workflow triggers on every push to main, no version gating
+- cache `node_modules` in CI to skip `npm ci` on unchanged deps
 
 ## [0.4.0] - 2026-03-04
 
