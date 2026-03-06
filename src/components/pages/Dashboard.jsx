@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 import { RotateCcw } from 'lucide-react'
@@ -8,6 +8,8 @@ import InlineInput from '../atoms/InlineInput'
 import SkinTypeModal from '../molecules/SkinTypeModal'
 import ExposureModal, { exposure_label } from '../molecules/ExposureModal'
 import { LABELS } from '../atoms/SkinTypeOption'
+import { get_day_solar_data } from '../../modules/solar'
+import { minutes_for_target_iu } from '../../modules/vitd'
 
 
 const Page = styled.div`
@@ -79,6 +81,17 @@ const SkinTypeLink = styled.button`
     }
 `
 
+const SolarNoonText = styled.p`
+    text-align: center;
+    font-size: 0.95em;
+    color: var(--text-muted);
+    line-height: 1.6;
+`
+
+const Highlight = styled.strong`
+    color: var(--accent-dark);
+`
+
 // NIH daily recommended IU for adults
 const DAILY_RECOMMENDED_IU = 600
 
@@ -133,8 +146,23 @@ export default function Dashboard( { settings, update_settings, reset_settings }
 
     const daily_percent = Math.round( local_iu / DAILY_RECOMMENDED_IU * 100 )
 
+    // Solar noon = point with lowest SZA (sun highest in sky)
+    const solar_noon = useMemo( () => {
+        const solar_data = get_day_solar_data( lat, lng )
+        if( !solar_data.length ) return null
+        const peak = solar_data.reduce( ( best, s ) => s.sza_degrees < best.sza_degrees ? s : best )
+        const noon_label = peak.time.toLocaleTimeString( [], { hour: `2-digit`, minute: `2-digit`, hour12: false } )
+        const noon_minutes = Math.round( minutes_for_target_iu( peak.sza_degrees, local_iu, local_skin, local_exposed ) )
+        return { time: noon_label, minutes: noon_minutes }
+    }, [ lat, lng, local_iu, local_skin, local_exposed ] )
+
     return <Page>
         <Container>
+
+            { /* Solar noon summary */ }
+            { solar_noon && <SolarNoonText>
+                Solar noon is at <Highlight>{ solar_noon.time }</Highlight> — at that time it takes <Highlight>{ solar_noon.minutes } min</Highlight> of tanning to get your vitamin D.
+            </SolarNoonText> }
 
             { /* Chart */ }
             <ChartCard
