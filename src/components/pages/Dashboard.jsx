@@ -84,9 +84,32 @@ const SkinTypeLink = styled.button`
 const SolarNoonHeading = styled.h2`
     text-align: center;
     font-weight: 500;
-    text-decoration: underline;
-    text-decoration-color: var(--accent);
-    text-underline-offset: 0.3em;
+`
+
+const InlineTimeInput = styled.input.attrs( { type: `time` } )`
+    font-weight: 700;
+    color: var(--accent-dark);
+    background: none;
+    border: none;
+    border-bottom: 2px dashed var(--accent);
+    padding: 0 var(--space-xs);
+    font-size: inherit;
+    font-family: inherit;
+    line-height: inherit;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+
+    &:hover, &:focus {
+        border-bottom-style: solid;
+        border-color: var(--accent-dark);
+        outline: none;
+    }
+
+    /* Hide the clock icon in WebKit browsers */
+    &::-webkit-calendar-picker-indicator {
+        opacity: 0.5;
+        cursor: pointer;
+    }
 `
 
 const SolarNoonSub = styled.p`
@@ -163,37 +186,68 @@ export default function Dashboard( { settings, update_settings, reset_settings }
 
     const daily_percent = Math.round( local_iu / DAILY_RECOMMENDED_IU * 100 )
 
+    // Editable time — null means "use solar noon"
+    const [ selected_time, set_selected_time ] = useState( null )
+
+    const change_time = useCallback( ( e ) => {
+        set_selected_time( e.target.value )
+    }, [] )
+
+    // Full solar data for the day (memoize once per location)
+    const solar_data = useMemo( () => get_day_solar_data( lat, lng ), [ lat, lng ] )
+
     // Solar noon = point with lowest SZA (sun highest in sky)
-    const solar_noon = useMemo( () => {
-        const solar_data = get_day_solar_data( lat, lng )
+    const noon_time = useMemo( () => {
         if( !solar_data.length ) return null
         const peak = solar_data.reduce( ( best, s ) => s.sza_degrees < best.sza_degrees ? s : best )
-        const noon_label = peak.time.toLocaleTimeString( [], { hour: `2-digit`, minute: `2-digit`, hour12: false } )
-        const noon_minutes = Math.round( minutes_for_target_iu( peak.sza_degrees, local_iu, local_skin, local_exposed ) )
-        const burn = Math.round( time_to_erythema( peak.sza_degrees, local_skin ) )
+        return peak.time.toLocaleTimeString( [], { hour: `2-digit`, minute: `2-digit`, hour12: false } )
+    }, [ solar_data ] )
+
+    // Effective time: user-selected or solar noon
+    const effective_time = selected_time || noon_time
+
+    // Derive minutes / burn / ratio for the selected time
+    const selected_data = useMemo( () => {
+        if( !solar_data.length || !effective_time ) return null
+
+        // Find closest data point to the selected time
+        const to_mins = ( hhmm ) => {
+            const [ h, m ] = hhmm.split( `:` ).map( Number )
+            return h * 60 + m
+        }
+        const target_mins = to_mins( effective_time )
+        const target = solar_data.reduce( ( best, s ) =>
+            Math.abs( to_mins( s.hour_label ) - target_mins ) < Math.abs( to_mins( best.hour_label ) - target_mins )
+                ? s : best
+        )
+
+        const minutes = Math.round( minutes_for_target_iu( target.sza_degrees, local_iu, local_skin, local_exposed ) )
+        const burn = Math.round( time_to_erythema( target.sza_degrees, local_skin ) )
 
         // Ratio semantics: "more" when burn > vitd time, "less" when reversed
-        const is_more = burn >= noon_minutes
-        const ratio = noon_minutes > 0 && burn > 0
-            ? ( is_more ? burn / noon_minutes : noon_minutes / burn ).toFixed( 1 )
+        const is_more = burn >= minutes
+        const ratio = minutes > 0 && burn > 0
+            ? ( is_more ? burn / minutes : minutes / burn ).toFixed( 1 )
             : `∞`
 
-        return { time: noon_label, minutes: noon_minutes, burn, ratio, is_more }
-    }, [ lat, lng, local_iu, local_skin, local_exposed ] )
+        return { time: effective_time, matched_time: target.hour_label, minutes, burn, ratio, is_more }
+    }, [ solar_data, effective_time, local_iu, local_skin, local_exposed ] )
 
     return <Page>
         <Container>
 
             { /* Solar noon summary */ }
-            { solar_noon && <>
-                <SolarNoonHeading>Target: { solar_noon.minutes } min at { solar_noon.time }</SolarNoonHeading>
+            { selected_data && <>
+                <SolarNoonHeading>
+                    Target: { selected_data.minutes } min at{ ` ` }
+                    <InlineTimeInput value={ effective_time } onChange={ change_time } />
+                </SolarNoonHeading>
                 <SolarNoonSub>
-                    At solar noon ({ solar_noon.time }) estimated burn time is { solar_noon.burn } minutes.
-                    That means your { solar_noon.minutes } minutes sun gives{ ` ` }
-                    { solar_noon.is_more
-                        ? <><MoreLabel>{ solar_noon.ratio }x more</MoreLabel> vitamin D than burn risk</>
-                        : <><LessLabel>{ solar_noon.ratio }x less</LessLabel> vitamin D than burn risk</>
-                    }.
+                    At { effective_time } estimated burn time is { selected_data.burn } minutes.
+                    That means your { selected_data.minutes } minutes sun gives{ ` ` }
+                    { selected_data.is_more
+                        ? <><MoreLabel>{ selected_data.ratio }x more</MoreLabel> vitamin D than burn risk</>
+                        : <><LessLabel>{ selected_data.ratio }x less</LessLabel> vitamin D than burn risk</> }.
                 </SolarNoonSub>
             </> }
 
@@ -217,6 +271,7 @@ export default function Dashboard( { settings, update_settings, reset_settings }
                 skin_type={ local_skin }
                 percent_exposed={ local_exposed }
                 target_iu={ local_iu }
+                selected_time={ selected_data?.matched_time }
             />
 
             { /* Actions */ }

@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.4.0] - 2026-03-09
+
+### Added
+- Editable time input in solar noon heading — explore vitamin D/burn at any time of day
+- Yellow dashed reference line on chart tracks selected time
+- `--solar` CSS color variable for time indicator
+
+### Changed
+- Solar noon heading underline removed in favor of inline time input styling
+- Solar computation split into separate memos for data, noon time, and selected data
+
 ## [1.3.0] - 2026-03-09
 
 ### Added

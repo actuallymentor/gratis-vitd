@@ -1,6 +1,6 @@
 import { useMemo, useState, useCallback } from 'react'
 import styled from 'styled-components'
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, ReferenceLine } from 'recharts'
 
 import { get_day_solar_data } from '../../modules/solar'
 import { minutes_for_target_iu, time_to_erythema } from '../../modules/vitd'
@@ -18,7 +18,7 @@ const Card = styled.div`
  * Line chart showing minutes-to-target-IU and time-to-erythema across the day.
  * @param {{ lat: number, lng: number, skin_type: number, percent_exposed: number, target_iu: number }} props
  */
-export default function ChartCard( { lat, lng, skin_type, percent_exposed, target_iu } ) {
+export default function ChartCard( { lat, lng, skin_type, percent_exposed, target_iu, selected_time } ) {
 
     const chart_data = useMemo( () => {
 
@@ -114,6 +114,14 @@ export default function ChartCard( { lat, lng, skin_type, percent_exposed, targe
                     dot={ false }
                     activeDot={ { r: 4 } }
                 />
+
+                { /* Selected time indicator */ }
+                { selected_time && <ReferenceLine
+                    x={ selected_time }
+                    stroke="var(--solar)"
+                    strokeWidth={ 2 }
+                    strokeDasharray="6 3"
+                /> }
 
             </LineChart>
         </ResponsiveContainer>
