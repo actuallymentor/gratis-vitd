@@ -9,7 +9,7 @@ import SkinTypeModal from '../molecules/SkinTypeModal'
 import ExposureModal, { exposure_label } from '../molecules/ExposureModal'
 import { LABELS } from '../atoms/SkinTypeOption'
 import { get_day_solar_data } from '../../modules/solar'
-import { minutes_for_target_iu } from '../../modules/vitd'
+import { minutes_for_target_iu, time_to_erythema } from '../../modules/vitd'
 
 
 const Page = styled.div`
@@ -83,13 +83,13 @@ const SkinTypeLink = styled.button`
 
 const SolarNoonHeading = styled.h2`
     text-align: center;
-    font-weight: 700;
+    font-weight: 500;
 `
 
 const SolarNoonSub = styled.p`
     text-align: center;
-    color: var(--text-muted);
-    line-height: 1.6;
+    color: var(--text);
+    line-height: 1.8;
 `
 
 // NIH daily recommended IU for adults
@@ -139,10 +139,16 @@ export default function Dashboard( { settings, update_settings, reset_settings }
     }, [ update_settings ] )
 
     const change_iu = useCallback( ( val ) => {
+        set_local_iu( val )
+        if( val >= 100 && val <= 10000 ) debounced_save( { target_iu: val } )
+    }, [ debounced_save ] )
+
+    const commit_iu = useCallback( ( val ) => {
         const clamped = Math.max( 100, Math.min( 10000, val ) )
         set_local_iu( clamped )
-        debounced_save( { target_iu: clamped } )
-    }, [ debounced_save ] )
+        debounced_save.flush()
+        update_settings( { target_iu: clamped } )
+    }, [ update_settings, debounced_save ] )
 
     const daily_percent = Math.round( local_iu / DAILY_RECOMMENDED_IU * 100 )
 
@@ -153,7 +159,9 @@ export default function Dashboard( { settings, update_settings, reset_settings }
         const peak = solar_data.reduce( ( best, s ) => s.sza_degrees < best.sza_degrees ? s : best )
         const noon_label = peak.time.toLocaleTimeString( [], { hour: `2-digit`, minute: `2-digit`, hour12: false } )
         const noon_minutes = Math.round( minutes_for_target_iu( peak.sza_degrees, local_iu, local_skin, local_exposed ) )
-        return { time: noon_label, minutes: noon_minutes }
+        const burn = Math.round( time_to_erythema( peak.sza_degrees, local_skin ) )
+        const ratio = noon_minutes > 0 ? ( burn / noon_minutes ).toFixed( 1 ) : `∞`
+        return { time: noon_label, minutes: noon_minutes, ratio }
     }, [ lat, lng, local_iu, local_skin, local_exposed ] )
 
     return <Page>
@@ -161,9 +169,22 @@ export default function Dashboard( { settings, update_settings, reset_settings }
 
             { /* Solar noon summary */ }
             { solar_noon && <>
-                <SolarNoonHeading>Solar noon is at { solar_noon.time }</SolarNoonHeading>
-                <SolarNoonSub>At that time it takes { solar_noon.minutes } min of tanning to get your vitamin D.</SolarNoonSub>
+                <SolarNoonHeading>{ solar_noon.minutes } minutes at { solar_noon.time }</SolarNoonHeading>
+                <SolarNoonSub>At solar noon you get { solar_noon.ratio } times more vitamin D than burn risk</SolarNoonSub>
             </> }
+
+            { /* Inline settings sentence */ }
+            <SettingsText>
+                This assumes{ ` ` }
+                <SkinTypeLink onClick={ () => set_show_exposure_modal( true ) }>
+                    { exposure_label( local_exposed ) }
+                </SkinTypeLink>{ ` ` }exposed to the sun, skin type{ ` ` }
+                <SkinTypeLink onClick={ () => set_show_skin_modal( true ) }>
+                    { LABELS[ local_skin ] }
+                </SkinTypeLink>, and a target of{ ` ` }
+                <InlineInput value={ local_iu } on_change={ change_iu } on_blur={ commit_iu } min={ 100 } max={ 10000 } width="4em" /> IU which is{ ` ` }
+                <strong>{ daily_percent }%</strong> of the daily recommended amount.
+            </SettingsText>
 
             { /* Chart */ }
             <ChartCard
@@ -173,19 +194,6 @@ export default function Dashboard( { settings, update_settings, reset_settings }
                 percent_exposed={ local_exposed }
                 target_iu={ local_iu }
             />
-
-            { /* Inline settings sentence */ }
-            <SettingsText>
-                Assuming{ ` ` }
-                <SkinTypeLink onClick={ () => set_show_exposure_modal( true ) }>
-                    { exposure_label( local_exposed ) }
-                </SkinTypeLink>{ ` ` }exposed to the sun, skin type{ ` ` }
-                <SkinTypeLink onClick={ () => set_show_skin_modal( true ) }>
-                    { LABELS[ local_skin ] }
-                </SkinTypeLink>, and a target of{ ` ` }
-                <InlineInput value={ local_iu } on_change={ change_iu } min={ 100 } max={ 10000 } width="4em" /> IU which is{ ` ` }
-                <strong>{ daily_percent }%</strong> of the daily recommended amount.
-            </SettingsText>
 
             { /* Actions */ }
             <ButtonRow>

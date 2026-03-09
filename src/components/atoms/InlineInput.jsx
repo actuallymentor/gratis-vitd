@@ -32,19 +32,24 @@ const Input = styled.input`
 
 /**
  * A number input styled to sit inline within flowing text.
- * @param {{ value: number, on_change: Function, min: number, max: number, width: string }} props
+ * @param {{ value: number, on_change: Function, on_blur: Function, min: number, max: number, width: string }} props
  */
-export default function InlineInput( { value, on_change, min = 0, max = 10000, width, ...rest } ) {
+export default function InlineInput( { value, on_change, on_blur, min = 0, max = 10000, width, ...rest } ) {
 
     const handle_change = ( e ) => {
         const num = Number( e.target.value )
         if( !isNaN( num ) ) on_change( num )
     }
 
+    const handle_blur = ( e ) => {
+        if( on_blur ) on_blur( Number( e.target.value ) )
+    }
+
     return <Input
         type="number"
         value={ value }
         onChange={ handle_change }
+        onBlur={ handle_blur }
         min={ min }
         max={ max }
         $width={ width }

@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.3.0] - 2026-03-09
+
+### Added
+- Burn-to-vitamin-D ratio in solar noon subtitle
+
+### Fixed
+- IU input field snapping to 100 on every keystroke, preventing retyping
+
+### Changed
+- Solar noon heading shows minutes + time instead of just time
+- Subtitle styling matches settings text (color, line-height)
+- Chart moved below settings text in layout order
+- Heading font weight lightened to 500
+- "Assuming" → "This assumes" in settings sentence
+
 ## [1.2.0] - 2026-03-06
 
 ### Added
