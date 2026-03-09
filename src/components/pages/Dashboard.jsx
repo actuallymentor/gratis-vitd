@@ -105,11 +105,9 @@ const InlineTimeInput = styled.input.attrs( { type: `time` } )`
         outline: none;
     }
 
-    /* Hide the clock icon in WebKit browsers */
-    &::-webkit-calendar-picker-indicator {
-        opacity: 0.5;
-        cursor: pointer;
-    }
+    /* Hide the native clock icon */
+    &::-webkit-calendar-picker-indicator { display: none; }
+    -moz-appearance: textfield;
 `
 
 const SolarNoonSub = styled.p`
