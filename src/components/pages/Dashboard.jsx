@@ -95,6 +95,14 @@ const SolarNoonSub = styled.p`
     line-height: 1.8;
 `
 
+const MoreLabel = styled.strong`
+    color: var(--accent);
+`
+
+const LessLabel = styled.strong`
+    color: var(--erythema);
+`
+
 // NIH daily recommended IU for adults
 const DAILY_RECOMMENDED_IU = 600
 
@@ -163,8 +171,14 @@ export default function Dashboard( { settings, update_settings, reset_settings }
         const noon_label = peak.time.toLocaleTimeString( [], { hour: `2-digit`, minute: `2-digit`, hour12: false } )
         const noon_minutes = Math.round( minutes_for_target_iu( peak.sza_degrees, local_iu, local_skin, local_exposed ) )
         const burn = Math.round( time_to_erythema( peak.sza_degrees, local_skin ) )
-        const ratio = noon_minutes > 0 ? ( burn / noon_minutes ).toFixed( 1 ) : `∞`
-        return { time: noon_label, minutes: noon_minutes, burn, ratio }
+
+        // Ratio semantics: "more" when burn > vitd time, "less" when reversed
+        const is_more = burn >= noon_minutes
+        const ratio = noon_minutes > 0 && burn > 0
+            ? ( is_more ? burn / noon_minutes : noon_minutes / burn ).toFixed( 1 )
+            : `∞`
+
+        return { time: noon_label, minutes: noon_minutes, burn, ratio, is_more }
     }, [ lat, lng, local_iu, local_skin, local_exposed ] )
 
     return <Page>
@@ -172,8 +186,15 @@ export default function Dashboard( { settings, update_settings, reset_settings }
 
             { /* Solar noon summary */ }
             { solar_noon && <>
-                <SolarNoonHeading>{ solar_noon.minutes } minutes at { solar_noon.time }</SolarNoonHeading>
-                <SolarNoonSub>At solar noon it takes { solar_noon.burn } minutes to burn, meaning you get { solar_noon.ratio }x more vitamin D than burn risk</SolarNoonSub>
+                <SolarNoonHeading>Target: { solar_noon.minutes } min at { solar_noon.time }</SolarNoonHeading>
+                <SolarNoonSub>
+                    At solar noon ({ solar_noon.time }) estimated burn time is { solar_noon.burn } minutes.
+                    That means your { solar_noon.minutes } minutes sun gives{ ` ` }
+                    { solar_noon.is_more
+                        ? <><MoreLabel>{ solar_noon.ratio }x more</MoreLabel> vitamin D than burn risk</>
+                        : <><LessLabel>{ solar_noon.ratio }x less</LessLabel> vitamin D than burn risk</>
+                    }.
+                </SolarNoonSub>
             </> }
 
             { /* Inline settings sentence */ }
