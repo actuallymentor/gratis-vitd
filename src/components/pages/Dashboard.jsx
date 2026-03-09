@@ -87,7 +87,7 @@ const SolarNoonHeading = styled.h2`
 `
 
 const InlineTimeInput = styled.input.attrs( { type: `time` } )`
-    width: 5ch;
+    width: 7.5ch;
     font-weight: 700;
     color: var(--accent-dark);
     background: none;
@@ -106,14 +106,11 @@ const InlineTimeInput = styled.input.attrs( { type: `time` } )`
         outline: none;
     }
 
-    /* Hide native chrome (clock icon, arrows, spinners) across browsers */
-    &::-webkit-calendar-picker-indicator,
-    &::-webkit-inner-spin-button,
-    &::-webkit-clear-button { display: none; -webkit-appearance: none; }
-    &::-ms-clear { display: none; }
-    -webkit-appearance: none;
-    -moz-appearance: textfield;
-    appearance: textfield;
+    /* Style the native picker icon to match */
+    &::-webkit-calendar-picker-indicator {
+        cursor: pointer;
+        opacity: 0.6;
+    }
 `
 
 const SolarNoonSub = styled.p`
