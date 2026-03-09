@@ -272,6 +272,7 @@ export default function Dashboard( { settings, update_settings, reset_settings }
                 percent_exposed={ local_exposed }
                 target_iu={ local_iu }
                 selected_time={ selected_data?.matched_time }
+                on_select_time={ set_selected_time }
             />
 
             { /* Actions */ }

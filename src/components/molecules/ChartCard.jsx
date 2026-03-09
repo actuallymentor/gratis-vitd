@@ -18,7 +18,7 @@ const Card = styled.div`
  * Line chart showing minutes-to-target-IU and time-to-erythema across the day.
  * @param {{ lat: number, lng: number, skin_type: number, percent_exposed: number, target_iu: number }} props
  */
-export default function ChartCard( { lat, lng, skin_type, percent_exposed, target_iu, selected_time } ) {
+export default function ChartCard( { lat, lng, skin_type, percent_exposed, target_iu, selected_time, on_select_time } ) {
 
     const chart_data = useMemo( () => {
 
@@ -61,7 +61,7 @@ export default function ChartCard( { lat, lng, skin_type, percent_exposed, targe
     return <Card>
 
         <ResponsiveContainer width="100%" height={ 320 } onResize={ handle_resize }>
-            <LineChart data={ chart_data } margin={ { top: 5, right: 20, left: 0, bottom: 5 } }>
+            <LineChart data={ chart_data } margin={ { top: 5, right: 20, left: 0, bottom: 5 } } onClick={ ( e ) => e?.activeLabel && on_select_time?.( e.activeLabel ) } style={ { cursor: `crosshair` } }>
 
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
 
