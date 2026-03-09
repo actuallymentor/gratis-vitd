@@ -84,6 +84,9 @@ const SkinTypeLink = styled.button`
 const SolarNoonHeading = styled.h2`
     text-align: center;
     font-weight: 500;
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
+    text-underline-offset: 0.3em;
 `
 
 const SolarNoonSub = styled.p`
