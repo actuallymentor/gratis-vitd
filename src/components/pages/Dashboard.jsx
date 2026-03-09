@@ -241,7 +241,7 @@ export default function Dashboard( { settings, update_settings, reset_settings }
                     <InlineTimeInput value={ effective_time } onChange={ change_time } />
                 </SolarNoonHeading>
                 <SolarNoonSub>
-                    At { effective_time } estimated burn time is { selected_data.burn } minutes.
+                    At { effective_time }{ !selected_time && ` (solar noon)` } estimated burn time is { selected_data.burn } minutes.
                     That means your { selected_data.minutes } minutes sun gives{ ` ` }
                     { selected_data.is_more
                         ? <><MoreLabel>{ selected_data.ratio }x more</MoreLabel> vitamin D than burn risk</>
