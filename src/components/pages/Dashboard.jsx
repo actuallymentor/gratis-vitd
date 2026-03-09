@@ -164,7 +164,7 @@ export default function Dashboard( { settings, update_settings, reset_settings }
         const noon_minutes = Math.round( minutes_for_target_iu( peak.sza_degrees, local_iu, local_skin, local_exposed ) )
         const burn = Math.round( time_to_erythema( peak.sza_degrees, local_skin ) )
         const ratio = noon_minutes > 0 ? ( burn / noon_minutes ).toFixed( 1 ) : `∞`
-        return { time: noon_label, minutes: noon_minutes, ratio }
+        return { time: noon_label, minutes: noon_minutes, burn, ratio }
     }, [ lat, lng, local_iu, local_skin, local_exposed ] )
 
     return <Page>
@@ -173,7 +173,7 @@ export default function Dashboard( { settings, update_settings, reset_settings }
             { /* Solar noon summary */ }
             { solar_noon && <>
                 <SolarNoonHeading>{ solar_noon.minutes } minutes at { solar_noon.time }</SolarNoonHeading>
-                <SolarNoonSub>At solar noon you get { solar_noon.ratio } times more vitamin D than burn risk</SolarNoonSub>
+                <SolarNoonSub>At solar noon it takes { solar_noon.burn } minutes to burn, meaning you get { solar_noon.ratio }x more vitamin D than burn risk</SolarNoonSub>
             </> }
 
             { /* Inline settings sentence */ }
