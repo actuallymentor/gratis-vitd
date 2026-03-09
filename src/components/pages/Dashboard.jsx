@@ -119,7 +119,7 @@ const SolarNoonSub = styled.p`
 `
 
 const MoreLabel = styled.strong`
-    color: var(--accent);
+    color: var(--safe);
 `
 
 const LessLabel = styled.strong`

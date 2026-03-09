@@ -15,6 +15,7 @@ html { font-size: 100%; }
     /* Colors */
     --accent: #7ec0d0;
     --accent-dark: #5da8b8;
+    --safe: #5daa68;
     --erythema: #e07c5a;
     --solar: #f0c040;
     --bg: #fafbfc;
