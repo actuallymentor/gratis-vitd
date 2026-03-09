@@ -87,6 +87,7 @@ const SolarNoonHeading = styled.h2`
 `
 
 const InlineTimeInput = styled.input.attrs( { type: `time` } )`
+    width: 5.5em;
     font-weight: 700;
     color: var(--accent-dark);
     background: none;
