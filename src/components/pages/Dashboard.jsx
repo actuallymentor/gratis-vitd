@@ -86,8 +86,9 @@ const SolarNoonHeading = styled.h2`
     font-weight: 500;
 `
 
-const InlineTimeInput = styled.input.attrs( { type: `time` } )`
-    width: 6ch;
+const InlineTimeInput = styled.input.attrs( { type: `text`, inputMode: `numeric`, maxLength: 5, placeholder: `HH:MM` } )`
+    width: 5ch;
+    text-align: center;
     font-weight: 700;
     color: var(--accent-dark);
     background: none;
@@ -104,12 +105,6 @@ const InlineTimeInput = styled.input.attrs( { type: `time` } )`
         border-bottom-style: solid;
         border-color: var(--accent-dark);
         outline: none;
-    }
-
-    /* Style the native picker icon to match */
-    &::-webkit-calendar-picker-indicator {
-        cursor: pointer;
-        opacity: 0.6;
     }
 `
 
@@ -189,9 +184,17 @@ export default function Dashboard( { settings, update_settings, reset_settings }
 
     // Editable time — null means "use solar noon"
     const [ selected_time, set_selected_time ] = useState( null )
+    const [ time_draft, set_time_draft ] = useState( null )
 
-    const change_time = useCallback( ( e ) => {
-        set_selected_time( e.target.value )
+    // Validate and apply a time string like "14:30"
+    const commit_time = useCallback( ( raw ) => {
+        const match = raw.match( /^(\d{1,2}):(\d{2})$/ )
+        if( !match ) return set_time_draft( null )
+        const [ , h, m ] = match.map( Number )
+        if( h > 23 || m > 59 ) return set_time_draft( null )
+        const formatted = `${ String( h ).padStart( 2, `0` ) }:${ String( m ).padStart( 2, `0` ) }`
+        set_time_draft( null )
+        set_selected_time( formatted )
     }, [] )
 
     // Full solar data for the day (memoize once per location)
@@ -241,7 +244,12 @@ export default function Dashboard( { settings, update_settings, reset_settings }
             { selected_data && <>
                 <SolarNoonHeading>
                     Target: { selected_data.minutes } min at{ ` ` }
-                    <InlineTimeInput value={ effective_time } onChange={ change_time } />
+                    <InlineTimeInput
+                        value={ time_draft ?? effective_time }
+                        onChange={ ( e ) => set_time_draft( e.target.value ) }
+                        onBlur={ ( e ) => commit_time( e.target.value ) }
+                        onKeyDown={ ( e ) => e.key === `Enter` && commit_time( e.target.value ) }
+                    />
                 </SolarNoonHeading>
                 <SolarNoonSub>
                     At { effective_time }{ !selected_time && ` (solar noon)` } estimated burn time is { selected_data.burn } minutes.
