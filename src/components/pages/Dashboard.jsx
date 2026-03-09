@@ -106,9 +106,14 @@ const InlineTimeInput = styled.input.attrs( { type: `time` } )`
         outline: none;
     }
 
-    /* Hide the native clock icon */
-    &::-webkit-calendar-picker-indicator { display: none; }
+    /* Hide native chrome (clock icon, arrows, spinners) across browsers */
+    &::-webkit-calendar-picker-indicator,
+    &::-webkit-inner-spin-button,
+    &::-webkit-clear-button { display: none; -webkit-appearance: none; }
+    &::-ms-clear { display: none; }
+    -webkit-appearance: none;
     -moz-appearance: textfield;
+    appearance: textfield;
 `
 
 const SolarNoonSub = styled.p`
