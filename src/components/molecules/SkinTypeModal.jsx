@@ -1,7 +1,8 @@
 import styled from 'styled-components'
 import { X } from 'lucide-react'
 
-import { SWATCH_COLORS, LABELS, DESCRIPTIONS } from '../atoms/SkinTypeOption'
+import { SWATCH_COLORS } from '../atoms/SkinTypeOption'
+import { use_i18n } from '../../i18n/use_i18n'
 
 
 const Overlay = styled.div`
@@ -100,6 +101,8 @@ const TypeDescription = styled.span`
  */
 export default function SkinTypeModal( { selected, on_select, on_close } ) {
 
+    const { t } = use_i18n()
+
     const select_type = ( type ) => {
         on_select( type )
         on_close()
@@ -110,14 +113,14 @@ export default function SkinTypeModal( { selected, on_select, on_close } ) {
 
             <CloseButton onClick={ on_close }><X size={ 18 } /></CloseButton>
 
-            <Title>Fitzpatrick Skin Types</Title>
+            <Title>{ t( `skin.title` ) }</Title>
 
             { [ 1, 2, 3, 4, 5, 6 ].map( type =>
                 <TypeRow key={ type } $selected={ selected === type } onClick={ () => select_type( type ) }>
                     <Swatch $color={ SWATCH_COLORS[ type ] } />
                     <TypeInfo>
-                        <TypeLabel>{ LABELS[ type ] }</TypeLabel>
-                        <TypeDescription>{ DESCRIPTIONS[ type ] }</TypeDescription>
+                        <TypeLabel>{ t( `skin.type${ type }` ) }</TypeLabel>
+                        <TypeDescription>{ t( `skin.desc${ type }` ) }</TypeDescription>
                     </TypeInfo>
                 </TypeRow>
             ) }

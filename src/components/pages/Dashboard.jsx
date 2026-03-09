@@ -7,9 +7,9 @@ import ChartCard from '../molecules/ChartCard'
 import InlineInput from '../atoms/InlineInput'
 import SkinTypeModal from '../molecules/SkinTypeModal'
 import ExposureModal, { exposure_label } from '../molecules/ExposureModal'
-import { LABELS } from '../atoms/SkinTypeOption'
 import { get_day_solar_data } from '../../modules/solar'
 import { minutes_for_target_iu, time_to_erythema } from '../../modules/vitd'
+import { use_i18n } from '../../i18n/use_i18n'
 
 
 const Page = styled.div`
@@ -132,6 +132,7 @@ const DAILY_RECOMMENDED_IU = 600
  */
 export default function Dashboard( { settings, update_settings, reset_settings } ) {
 
+    const { t } = use_i18n()
     const { lat, lng, skin_type, percent_exposed, target_iu } = settings
 
     // Local state for responsive inputs — debounce persistence
@@ -243,7 +244,7 @@ export default function Dashboard( { settings, update_settings, reset_settings }
             { /* Solar noon summary */ }
             { selected_data && <>
                 <SolarNoonHeading>
-                    Target: { selected_data.minutes } min at{ ` ` }
+                    { t( `dashboard.target_heading`, { minutes: selected_data.minutes } ) }{ ` ` }
                     <InlineTimeInput
                         value={ time_draft ?? effective_time }
                         onChange={ ( e ) => set_time_draft( e.target.value ) }
@@ -252,25 +253,27 @@ export default function Dashboard( { settings, update_settings, reset_settings }
                     />
                 </SolarNoonHeading>
                 <SolarNoonSub>
-                    At { effective_time }{ !selected_time && ` (solar noon)` } estimated burn time is { selected_data.burn } minutes.
-                    That means your { selected_data.minutes } minutes sun gives{ ` ` }
+                    { t( `dashboard.at_time`, { time: effective_time } ) }
+                    { !selected_time && ` (${ t( `dashboard.solar_noon` ) })` }
+                    { ` ` }{ t( `dashboard.burn_time`, { minutes: selected_data.burn } ) }
+                    { ` ` }{ t( `dashboard.your_minutes`, { minutes: selected_data.minutes } ) }{ ` ` }
                     { selected_data.is_more
-                        ? <><MoreLabel>{ selected_data.ratio }x more</MoreLabel> vitamin D than burn risk</>
-                        : <><LessLabel>{ selected_data.ratio }x less</LessLabel> vitamin D than burn risk</> }.
+                        ? <><MoreLabel>{ t( `dashboard.more_vitd`, { ratio: selected_data.ratio } ) }</MoreLabel> { t( `dashboard.than_burn` ) }</>
+                        : <><LessLabel>{ t( `dashboard.less_vitd`, { ratio: selected_data.ratio } ) }</LessLabel> { t( `dashboard.than_burn` ) }</> }.
                 </SolarNoonSub>
             </> }
 
             { /* Inline settings sentence */ }
             <SettingsText>
-                This assumes{ ` ` }
+                { t( `dashboard.assumes` ) }{ ` ` }
                 <SkinTypeLink onClick={ () => set_show_exposure_modal( true ) }>
-                    { exposure_label( local_exposed ) }
-                </SkinTypeLink>{ ` ` }exposed to the sun, skin type{ ` ` }
+                    { exposure_label( local_exposed, t ) }
+                </SkinTypeLink>{ ` ` }{ t( `dashboard.exposed_to_sun` ) }{ ` ` }
                 <SkinTypeLink onClick={ () => set_show_skin_modal( true ) }>
-                    { LABELS[ local_skin ] }
-                </SkinTypeLink>, and a target of{ ` ` }
-                <InlineInput value={ local_iu } on_change={ change_iu } on_blur={ commit_iu } min={ 100 } max={ 10000 } width="4em" /> IU which is{ ` ` }
-                <strong>{ daily_percent }%</strong> of the daily recommended amount.
+                    { t( `skin.type${ local_skin }` ) }
+                </SkinTypeLink>, { t( `dashboard.target_of` ) }{ ` ` }
+                <InlineInput value={ local_iu } on_change={ change_iu } on_blur={ commit_iu } min={ 100 } max={ 10000 } width="4em" /> { t( `dashboard.iu_which_is` ) }{ ` ` }
+                <strong>{ daily_percent }%</strong> { t( `dashboard.daily_recommended` ) }
             </SettingsText>
 
             { /* Chart */ }
@@ -288,7 +291,7 @@ export default function Dashboard( { settings, update_settings, reset_settings }
             <ButtonRow>
                 <IconButton onClick={ reset_settings }>
                     <RotateCcw size={ 14 } />
-                    Reset location & settings
+                    { t( `dashboard.reset` ) }
                 </IconButton>
             </ButtonRow>
 

@@ -2,6 +2,8 @@ import { useState } from 'react'
 import styled from 'styled-components'
 import { Info } from 'lucide-react'
 
+import { use_i18n } from '../../i18n/use_i18n'
+
 
 // Swatch colors roughly representing Fitzpatrick types
 export const SWATCH_COLORS = {
@@ -11,24 +13,6 @@ export const SWATCH_COLORS = {
     4: `#a67c52`,
     5: `#6b4226`,
     6: `#3b2211`,
-}
-
-export const LABELS = {
-    1: `Type I — Very fair`,
-    2: `Type II — Fair`,
-    3: `Type III — Medium`,
-    4: `Type IV — Olive`,
-    5: `Type V — Brown`,
-    6: `Type VI — Dark`,
-}
-
-export const DESCRIPTIONS = {
-    1: `Always burns, never tans. Very sun-sensitive. Typical: very pale skin, red/blonde hair, blue eyes`,
-    2: `Burns easily, tans minimally. Typical: fair skin, light hair, light eyes`,
-    3: `Sometimes burns, tans gradually. Typical: cream-white to light brown skin`,
-    4: `Rarely burns, tans easily. Typical: moderate brown skin`,
-    5: `Very rarely burns, tans very easily. Typical: dark brown skin`,
-    6: `Never burns. Typical: deeply pigmented dark brown to black skin`,
 }
 
 const Card = styled.button`
@@ -106,17 +90,18 @@ const Tooltip = styled.span`
  */
 export default function SkinTypeOption( { type, selected, on_select } ) {
 
+    const { t } = use_i18n()
     const [ show_tip, set_show_tip ] = useState( false )
 
     return <Card $selected={ selected } onClick={ () => on_select( type ) }>
         <Swatch $color={ SWATCH_COLORS[ type ] } />
-        <Label>{ LABELS[ type ] }</Label>
+        <Label>{ t( `skin.type${ type }` ) }</Label>
         <InfoWrap
             onMouseEnter={ () => set_show_tip( true ) }
             onMouseLeave={ () => set_show_tip( false ) }
         >
             <Info size={ 14 } />
-            { show_tip && <Tooltip>{ DESCRIPTIONS[ type ] }</Tooltip> }
+            { show_tip && <Tooltip>{ t( `skin.desc${ type }` ) }</Tooltip> }
         </InfoWrap>
     </Card>
 

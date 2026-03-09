@@ -1,23 +1,28 @@
 import styled from 'styled-components'
 import { X } from 'lucide-react'
 
+import { use_i18n } from '../../i18n/use_i18n'
 
-export const EXPOSURE_OPTIONS = [
-    { percent: 10, label: `Face and hands`, icon: `🙂` },
-    { percent: 27, label: `Face, hands, and arms`, icon: `💪` },
-    { percent: 63, label: `Face, hands, arms, and legs`, icon: `🩳` },
-    { percent: 100, label: `Birthday suit`, icon: `✨` },
+
+// Exposure options with i18n keys for labels
+const EXPOSURE_OPTIONS = [
+    { percent: 10, key: `exposure.face_hands`, icon: `🙂` },
+    { percent: 27, key: `exposure.face_hands_arms`, icon: `💪` },
+    { percent: 63, key: `exposure.face_hands_arms_legs`, icon: `🩳` },
+    { percent: 100, key: `exposure.birthday_suit`, icon: `✨` },
 ]
 
 /**
  * Get the display label for a given exposure percent.
- * Falls back to "XX% exposed" for custom values.
+ * Falls back to "{percent}% exposed" for custom values.
  * @param {number} percent
+ * @param {Function} t - Translation function
  * @returns {string}
  */
-export function exposure_label( percent ) {
+export function exposure_label( percent, t ) {
     const match = EXPOSURE_OPTIONS.find( o => o.percent === percent )
-    return match ? `${ match.percent }% — ${ match.label }` : `${ percent }% exposed`
+    if( match ) return `${ match.percent }% — ${ t( match.key ) }`
+    return t( `exposure.custom_label`, { percent } )
 }
 
 
@@ -108,6 +113,8 @@ const OptionPercent = styled.span`
  */
 export default function ExposureModal( { selected, on_select, on_close } ) {
 
+    const { t } = use_i18n()
+
     const select_option = ( percent ) => {
         on_select( percent )
         on_close()
@@ -118,14 +125,14 @@ export default function ExposureModal( { selected, on_select, on_close } ) {
 
             <CloseButton onClick={ on_close }><X size={ 18 } /></CloseButton>
 
-            <Title>Body exposure</Title>
+            <Title>{ t( `exposure.title` ) }</Title>
 
-            { EXPOSURE_OPTIONS.map( ( { percent, label, icon } ) =>
+            { EXPOSURE_OPTIONS.map( ( { percent, key, icon } ) =>
                 <OptionRow key={ percent } $selected={ selected === percent } onClick={ () => select_option( percent ) }>
                     <Icon>{ icon }</Icon>
                     <OptionInfo>
-                        <OptionLabel>{ label }</OptionLabel>
-                        <OptionPercent>{ percent }% of skin exposed</OptionPercent>
+                        <OptionLabel>{ t( key ) }</OptionLabel>
+                        <OptionPercent>{ t( `exposure.percent_exposed`, { percent } ) }</OptionPercent>
                     </OptionInfo>
                 </OptionRow>
             ) }

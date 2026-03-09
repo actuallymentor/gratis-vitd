@@ -4,6 +4,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 
 import { get_day_solar_data } from '../../modules/solar'
 import { minutes_for_target_iu, time_to_erythema } from '../../modules/vitd'
+import { use_i18n } from '../../i18n/use_i18n'
 
 
 const Card = styled.div`
@@ -19,6 +20,8 @@ const Card = styled.div`
  * @param {{ lat: number, lng: number, skin_type: number, percent_exposed: number, target_iu: number }} props
  */
 export default function ChartCard( { lat, lng, skin_type, percent_exposed, target_iu, selected_time, on_select_time } ) {
+
+    const { t } = use_i18n()
 
     const chart_data = useMemo( () => {
 
@@ -42,7 +45,7 @@ export default function ChartCard( { lat, lng, skin_type, percent_exposed, targe
 
     if( !chart_data.length ) return <Card>
         <p style={ { textAlign: `center`, color: `var(--text-muted)` } }>
-            No sunlight data available for this location today.
+            { t( `chart.no_data` ) }
         </p>
     </Card>
 
@@ -50,7 +53,7 @@ export default function ChartCard( { lat, lng, skin_type, percent_exposed, targe
     // Track container width to adapt tick density
     const [ chart_width, set_chart_width ] = useState( 600 )
     const handle_resize = useCallback( ( w ) => {
-        if( w ) set_chart_width( w ) 
+        if( w ) set_chart_width( w )
     }, [] )
 
     // Fewer labels on narrow screens to prevent overlap
@@ -76,7 +79,7 @@ export default function ChartCard( { lat, lng, skin_type, percent_exposed, targe
                 />
 
                 <YAxis
-                    label={ { value: `Minutes of tanning`, angle: -90, position: `insideLeft`, style: { fontSize: 12 } } }
+                    label={ { value: t( `chart.y_axis` ), angle: -90, position: `insideLeft`, style: { fontSize: 12 } } }
                     tick={ { fontSize: 12 } }
                     stroke="var(--text-muted)"
                     domain={ [ 0, `auto` ] }
@@ -85,13 +88,13 @@ export default function ChartCard( { lat, lng, skin_type, percent_exposed, targe
                 <Tooltip
                     contentStyle={ { borderRadius: `0.5rem`, fontSize: `0.85rem` } }
                     formatter={ ( value, name ) => [
-                        `${ Math.round( value ) } min`,
-                        name === `vitd_minutes` ? `Vitamin D` : `Sunburn`,
+                        t( `chart.value_min`, { value: Math.round( value ) } ),
+                        name === `vitd_minutes` ? t( `chart.tooltip_vitd` ) : t( `chart.tooltip_burn` ),
                     ] }
                 />
 
                 <Legend
-                    formatter={ ( value ) => value === `vitd_minutes` ? `Minutes for vitamin D` : `Minutes to sunburn` }
+                    formatter={ ( value ) => value === `vitd_minutes` ? t( `chart.legend_vitd` ) : t( `chart.legend_burn` ) }
                 />
 
                 { /* Vitamin D target line */ }

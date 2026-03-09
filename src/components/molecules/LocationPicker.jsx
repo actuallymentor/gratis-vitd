@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { MapPin, Globe, X, Search } from 'lucide-react'
 
 import { log } from 'mentie'
+import { use_i18n } from '../../i18n/use_i18n'
 
 
 /* ── Styled components ──────────────────────────── */
@@ -306,6 +307,8 @@ const LOCATIONS = [
  */
 export default function LocationPicker( { on_select, geo_loading, geo_error, request_location } ) {
 
+    const { t } = use_i18n()
+
     const [ modal_open, set_modal_open ] = useState( false )
     const [ tab, set_tab ] = useState( `city` )
     const [ search, set_search ] = useState( `` )
@@ -343,7 +346,7 @@ export default function LocationPicker( { on_select, geo_loading, geo_error, req
         { /* Use my location button */ }
         <PrimaryButton onClick={ request_location } disabled={ geo_loading }>
             <MapPin size={ 18 } />
-            { geo_loading ? `Detecting location...` : `Use my location` }
+            { geo_loading ? t( `location.detecting` ) : t( `location.use_mine` ) }
         </PrimaryButton>
 
         { geo_error && <ErrorText>{ geo_error }</ErrorText> }
@@ -351,7 +354,7 @@ export default function LocationPicker( { on_select, geo_loading, geo_error, req
         { /* Choose manually link */ }
         <SubtleLink onClick={ () => set_modal_open( true ) }>
             <Globe size={ 14 } />
-            Choose manually
+            { t( `location.choose_manually` ) }
         </SubtleLink>
 
         { /* Modal */ }
@@ -362,11 +365,11 @@ export default function LocationPicker( { on_select, geo_loading, geo_error, req
                     <X size={ 20 } />
                 </CloseButton>
 
-                <h2>Choose location</h2>
+                <h2>{ t( `location.choose_title` ) }</h2>
 
                 <TabRow>
-                    <Tab $active={ tab === `city` } onClick={ () => set_tab( `city` ) }>City</Tab>
-                    <Tab $active={ tab === `coords` } onClick={ () => set_tab( `coords` ) }>Coordinates</Tab>
+                    <Tab $active={ tab === `city` } onClick={ () => set_tab( `city` ) }>{ t( `location.tab_city` ) }</Tab>
+                    <Tab $active={ tab === `coords` } onClick={ () => set_tab( `coords` ) }>{ t( `location.tab_coords` ) }</Tab>
                 </TabRow>
 
                 { tab === `city` && <>
@@ -374,7 +377,7 @@ export default function LocationPicker( { on_select, geo_loading, geo_error, req
                         <Search />
                         <input
                             type="text"
-                            placeholder="Search countries or cities..."
+                            placeholder={ t( `location.search_placeholder` ) }
                             value={ search }
                             onChange={ e => set_search( e.target.value ) }
                             autoFocus
@@ -393,7 +396,7 @@ export default function LocationPicker( { on_select, geo_loading, geo_error, req
                 { tab === `coords` && <>
                     <CoordRow>
                         <InputGroup>
-                            <label>Latitude</label>
+                            <label>{ t( `location.latitude` ) }</label>
                             <input
                                 type="number"
                                 placeholder="e.g. 52.37"
@@ -405,7 +408,7 @@ export default function LocationPicker( { on_select, geo_loading, geo_error, req
                             />
                         </InputGroup>
                         <InputGroup>
-                            <label>Longitude</label>
+                            <label>{ t( `location.longitude` ) }</label>
                             <input
                                 type="number"
                                 placeholder="e.g. 4.90"
@@ -421,7 +424,7 @@ export default function LocationPicker( { on_select, geo_loading, geo_error, req
                         onClick={ confirm_coords }
                         disabled={ !coord_lat || !coord_lng }
                     >
-                        Confirm
+                        { t( `location.confirm` ) }
                     </ConfirmButton>
                 </> }
 

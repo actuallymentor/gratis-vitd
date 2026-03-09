@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Sun } from 'lucide-react'
 
 import { use_geolocation } from '../../hooks/use_geolocation'
+import { use_i18n } from '../../i18n/use_i18n'
 import LocationPicker from '../molecules/LocationPicker'
 
 
@@ -53,14 +54,15 @@ const SectionLabel = styled.h3`
  */
 export default function Onboarding( { settings, update_settings } ) {
 
+    const { t } = use_i18n()
     const { lat, lng, loading, error, request_location } = use_geolocation()
 
     // When geolocation succeeds, save and move on
     useEffect( () => {
         if( lat !== null && lng !== null ) {
-            update_settings( { lat, lng, location_name: `My location` } )
+            update_settings( { lat, lng, location_name: t( `onboarding.my_location` ) } )
         }
-    }, [ lat, lng, update_settings ] )
+    }, [ lat, lng, update_settings, t ] )
 
     const select_location = ( lat, lng, name ) => {
         update_settings( { lat, lng, location_name: name } )
@@ -71,14 +73,12 @@ export default function Onboarding( { settings, update_settings } ) {
 
             <IconWrap><Sun size={ 48 } strokeWidth={ 1.5 } /></IconWrap>
 
-            <Title>Vitamin D Calculator</Title>
+            <Title>{ t( `app.title` ) }</Title>
 
-            <Subtitle>
-                Check how long you need to tan to get your fill of vitamin D today.
-            </Subtitle>
+            <Subtitle>{ t( `app.subtitle` ) }</Subtitle>
 
             { /* Location section */ }
-            <SectionLabel>Your location</SectionLabel>
+            <SectionLabel>{ t( `onboarding.your_location` ) }</SectionLabel>
 
             { settings.location_name && <LocationConfirmed>{ settings.location_name }</LocationConfirmed> }
 
