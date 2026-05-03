@@ -58,14 +58,15 @@ export default function Onboarding( { settings, update_settings } ) {
     const { lat, lng, loading, error, request_location } = use_geolocation()
 
     // When geolocation succeeds, save and move on
+    // location_name stays empty — Dashboard will reverse-geocode into "City, Country"
     useEffect( () => {
         if( lat !== null && lng !== null ) {
-            update_settings( { lat, lng, location_name: t( `onboarding.my_location` ) } )
+            update_settings( { lat, lng, location_name: ``, auto_location: true } )
         }
-    }, [ lat, lng, update_settings, t ] )
+    }, [ lat, lng, update_settings ] )
 
     const select_location = ( lat, lng, name ) => {
-        update_settings( { lat, lng, location_name: name } )
+        update_settings( { lat, lng, location_name: name, auto_location: false } )
     }
 
     return <Page>

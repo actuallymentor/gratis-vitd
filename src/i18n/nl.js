@@ -8,7 +8,6 @@ export default {
 
     // ── Onboarding ────────────────────────────────
     'onboarding.your_location': `Jouw locatie`,
-    'onboarding.my_location': `Mijn locatie`,
 
     // ── Location picker ───────────────────────────
     'location.use_mine': `Gebruik mijn locatie`,

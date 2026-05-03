@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 import { RotateCcw } from 'lucide-react'
+import { log } from 'mentie'
 
 import ChartCard from '../molecules/ChartCard'
 import InlineInput from '../atoms/InlineInput'
@@ -9,6 +10,7 @@ import SkinTypeModal from '../molecules/SkinTypeModal'
 import ExposureModal, { exposure_label } from '../molecules/ExposureModal'
 import { get_day_solar_data } from '../../modules/solar'
 import { minutes_for_target_iu, time_to_erythema } from '../../modules/vitd'
+import { reverse_geocode } from '../../modules/geocode'
 import { use_i18n } from '../../i18n/use_i18n'
 
 
@@ -42,6 +44,13 @@ const ButtonRow = styled.div`
     gap: var(--space-m);
     flex-wrap: wrap;
     justify-content: center;
+`
+
+const LocationLabel = styled.p`
+    font-size: 0.85em;
+    color: var(--text-muted);
+    text-align: center;
+    line-height: 1.4;
 `
 
 const IconButton = styled.button`
@@ -163,7 +172,7 @@ const get_now_time = () => {
 export default function Dashboard( { settings, update_settings, reset_settings } ) {
 
     const { t } = use_i18n()
-    const { lat, lng, skin_type, percent_exposed, target_iu } = settings
+    const { lat, lng, skin_type, percent_exposed, target_iu, location_name, auto_location } = settings
 
     // Local state for responsive inputs — debounce persistence
     const [ local_exposed, set_local_exposed ] = useState( percent_exposed )
@@ -186,6 +195,45 @@ export default function Dashboard( { settings, update_settings, reset_settings }
 
     // Flush any pending debounced save on unmount (prevents lost changes)
     useEffect( () => () => debounced_save.flush(), [ debounced_save ] )
+
+    // Auto-located users get a fresh GPS fix on mount + every 30 minutes while open.
+    // Manual locations stay put — the user knows where they are.
+    useEffect( () => {
+
+        if( !auto_location || !navigator.geolocation ) return
+
+        // Guard against the in-flight callback resolving after we unmount or the
+        // user switches to manual location, which would clobber their new pick
+        let cancelled = false
+
+        const refresh_location = () => navigator.geolocation.getCurrentPosition(
+            ( { coords } ) => {
+                if( cancelled ) return
+                update_settings( { lat: coords.latitude, lng: coords.longitude } )
+            },
+            ( err ) => log.warn( `Auto-refresh location failed:`, err.message ),
+            { enableHighAccuracy: false, timeout: 10_000, maximumAge: 300_000 }
+        )
+
+        refresh_location()
+        const interval = setInterval( refresh_location, 30 * 60 * 1000 )
+        return () => {
+            cancelled = true
+            clearInterval( interval )
+        }
+
+    }, [ auto_location, update_settings ] )
+
+    // Reverse-geocode coords into a city name whenever they change.
+    // Offline static lookup — runs only for auto-located users.
+    useEffect( () => {
+
+        if( !auto_location || lat === null || lng === null ) return
+
+        const name = reverse_geocode( lat, lng )
+        if( name && name !== location_name ) update_settings( { location_name: name } )
+
+    }, [ lat, lng, auto_location, location_name, update_settings ] )
 
     // Exposure changes via modal — save immediately
     const change_exposed = useCallback( ( val ) => {
@@ -344,6 +392,11 @@ export default function Dashboard( { settings, update_settings, reset_settings }
                 selected_time={ selected_data?.matched_time }
                 on_select_time={ select_from_chart }
             />
+
+            { /* Current location summary */ }
+            <LocationLabel>
+                { location_name || `${ lat.toFixed( 2 ) }°, ${ lng.toFixed( 2 ) }°` }
+            </LocationLabel>
 
             { /* Actions */ }
             <ButtonRow>

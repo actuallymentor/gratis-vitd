@@ -8,7 +8,6 @@ export default {
 
     // ── Onboarding ────────────────────────────────
     'onboarding.your_location': `現在地`,
-    'onboarding.my_location': `現在地`,
 
     // ── Location picker ───────────────────────────
     'location.use_mine': `現在地を使用`,

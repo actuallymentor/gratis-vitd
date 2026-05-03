@@ -8,7 +8,6 @@ export default {
 
     // ── Onboarding ────────────────────────────────
     'onboarding.your_location': `Votre position`,
-    'onboarding.my_location': `Ma position`,
 
     // ── Location picker ───────────────────────────
     'location.use_mine': `Utiliser ma position`,

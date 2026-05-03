@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.6.0] - 2026-05-03
+
+### Added
+- Auto-located users get periodic GPS refresh (on mount + every 30 min)
+- Subtle location label above the reset button — "Prague" or coords if unknown
+- Offline reverse geocoding via static city lookup (no external APIs, ~150 km radius)
+- `auto_location` settings flag distinguishes browser geolocation from manual pick
+
+### Changed
+- LOCATIONS catalogue extracted to `src/modules/locations.js` for reuse
+
+### Removed
+- Unused `onboarding.my_location` translation key across all locales
+
 ## [1.5.0] - 2026-05-03
 
 ### Added
