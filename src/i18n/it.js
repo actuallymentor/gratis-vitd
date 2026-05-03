@@ -23,7 +23,8 @@ export default {
 
     // ── Dashboard ─────────────────────────────────
     'dashboard.target_heading': `{minutes} min alle`,
-    'dashboard.rda': `{percent}% RDA`,
+    'dashboard.iu_vitamin_d': `UI Vitamina D`,
+    'dashboard.rda': `({percent}% RDA)`,
     'dashboard.now': `Adesso`,
     'dashboard.solar_noon': `mezzogiorno solare`,
     'dashboard.at_time': `Alle {time}`,
@@ -32,11 +33,8 @@ export default {
     'dashboard.more_vitd': `{ratio}x più`,
     'dashboard.less_vitd': `{ratio}x meno`,
     'dashboard.than_burn': `vitamina D rispetto al rischio di scottatura`,
-    'dashboard.assumes': `Si presume`,
+    'dashboard.assumes': `Si presume cielo sereno e`,
     'dashboard.exposed_to_sun': `esposto al sole, tipo di pelle`,
-    'dashboard.target_of': `e un obiettivo di`,
-    'dashboard.iu_which_is': `UI pari al`,
-    'dashboard.daily_recommended': `della dose giornaliera raccomandata.`,
     'dashboard.location_label': `Posizione: {value}`,
     'dashboard.reset': `Reimposta posizione e impostazioni`,
 

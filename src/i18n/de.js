@@ -23,7 +23,8 @@ export default {
 
     // ── Dashboard ─────────────────────────────────
     'dashboard.target_heading': `{minutes} Min. um`,
-    'dashboard.rda': `{percent}% TDR`,
+    'dashboard.iu_vitamin_d': `IE Vitamin D`,
+    'dashboard.rda': `({percent}% TDR)`,
     'dashboard.now': `Jetzt`,
     'dashboard.solar_noon': `Sonnenhöchststand`,
     'dashboard.at_time': `Um {time}`,
@@ -32,11 +33,8 @@ export default {
     'dashboard.more_vitd': `{ratio}x mehr`,
     'dashboard.less_vitd': `{ratio}x weniger`,
     'dashboard.than_burn': `Vitamin D als Sonnenbrandrisiko`,
-    'dashboard.assumes': `Dies setzt voraus:`,
+    'dashboard.assumes': `Dies setzt klaren Himmel voraus und`,
     'dashboard.exposed_to_sun': `der Sonne ausgesetzt, Hauttyp`,
-    'dashboard.target_of': `und ein Ziel von`,
-    'dashboard.iu_which_is': `IE, das sind`,
-    'dashboard.daily_recommended': `der empfohlenen Tagesmenge.`,
     'dashboard.location_label': `Standort: {value}`,
     'dashboard.reset': `Standort & Einstellungen zurücksetzen`,
 

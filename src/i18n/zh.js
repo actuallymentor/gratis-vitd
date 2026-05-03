@@ -23,7 +23,8 @@ export default {
 
     // ── Dashboard ─────────────────────────────────
     'dashboard.target_heading': `{minutes}分钟`,
-    'dashboard.rda': `推荐量的{percent}%`,
+    'dashboard.iu_vitamin_d': `IU 维生素D`,
+    'dashboard.rda': `(推荐量的{percent}%)`,
     'dashboard.now': `现在`,
     'dashboard.solar_noon': `正午`,
     'dashboard.at_time': `在{time}`,
@@ -32,11 +33,8 @@ export default {
     'dashboard.more_vitd': `{ratio}倍更多的`,
     'dashboard.less_vitd': `{ratio}倍更少的`,
     'dashboard.than_burn': `维生素D（相对于晒伤风险）`,
-    'dashboard.assumes': `假设条件：`,
+    'dashboard.assumes': `假设晴空且`,
     'dashboard.exposed_to_sun': `暴露在阳光下，皮肤类型`,
-    'dashboard.target_of': `目标`,
-    'dashboard.iu_which_is': `IU，占`,
-    'dashboard.daily_recommended': `每日推荐量。`,
     'dashboard.location_label': `位置：{value}`,
     'dashboard.reset': `重置位置和设置`,
 

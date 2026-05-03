@@ -23,7 +23,8 @@ export default {
 
     // ── Dashboard ─────────────────────────────────
     'dashboard.target_heading': `{minutes} мин. в`,
-    'dashboard.rda': `{percent}% РСП`,
+    'dashboard.iu_vitamin_d': `МЕ витамина D`,
+    'dashboard.rda': `({percent}% РСП)`,
     'dashboard.now': `Сейчас`,
     'dashboard.solar_noon': `солнечный полдень`,
     'dashboard.at_time': `В {time}`,
@@ -32,11 +33,8 @@ export default {
     'dashboard.more_vitd': `в {ratio} раз больше`,
     'dashboard.less_vitd': `в {ratio} раз меньше`,
     'dashboard.than_burn': `витамина D, чем риска ожога`,
-    'dashboard.assumes': `Предполагается`,
+    'dashboard.assumes': `Предполагается ясное небо и`,
     'dashboard.exposed_to_sun': `открыто солнцу, тип кожи`,
-    'dashboard.target_of': `и цель в`,
-    'dashboard.iu_which_is': `МЕ, что составляет`,
-    'dashboard.daily_recommended': `от рекомендуемой суточной нормы.`,
     'dashboard.location_label': `Местоположение: {value}`,
     'dashboard.reset': `Сбросить местоположение и настройки`,
 

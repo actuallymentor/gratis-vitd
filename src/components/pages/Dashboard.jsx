@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
-import { RotateCcw, Clock, Sun, ArrowBigRight } from 'lucide-react'
+import { RotateCcw, Clock, Sun, ArrowBigDown } from 'lucide-react'
 import { log } from 'mentie'
 
 import ChartCard from '../molecules/ChartCard'
@@ -93,15 +93,23 @@ const SkinTypeLink = styled.button`
 
 const SolarNoonHeading = styled.h2`
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
     gap: var(--space-xs);
     text-align: center;
     font-weight: 500;
 
     /* Arrow inherits the heading color but stays a touch lighter */
     svg { color: var(--text-muted); }
+`
+
+// Single line of the heading — keeps inline runs of text + inputs aligned
+const HeadingRow = styled.span`
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
 `
 
 const PillRow = styled.div`
@@ -357,15 +365,21 @@ export default function Dashboard( { settings, update_settings, reset_settings }
             { /* Solar noon summary */ }
             { selected_data && <>
                 <SolarNoonHeading>
-                    <span>{ t( `dashboard.target_heading`, { minutes: selected_data.minutes } ) }</span>
-                    <InlineTimeInput
-                        value={ time_draft ?? effective_time }
-                        onChange={ ( e ) => set_time_draft( e.target.value ) }
-                        onBlur={ ( e ) => commit_time( e.target.value ) }
-                        onKeyDown={ ( e ) => e.key === `Enter` && commit_time( e.target.value ) }
-                    />
-                    <ArrowBigRight size={ 22 } strokeWidth={ 1.75 } fill="currentColor" />
-                    <span>{ t( `dashboard.rda`, { percent: daily_percent } ) }</span>
+                    <HeadingRow>
+                        <span>{ t( `dashboard.target_heading`, { minutes: selected_data.minutes } ) }</span>
+                        <InlineTimeInput
+                            value={ time_draft ?? effective_time }
+                            onChange={ ( e ) => set_time_draft( e.target.value ) }
+                            onBlur={ ( e ) => commit_time( e.target.value ) }
+                            onKeyDown={ ( e ) => e.key === `Enter` && commit_time( e.target.value ) }
+                        />
+                    </HeadingRow>
+                    <ArrowBigDown size={ 26 } strokeWidth={ 1.75 } fill="currentColor" />
+                    <HeadingRow>
+                        <InlineInput value={ local_iu } on_change={ change_iu } on_blur={ commit_iu } min={ 100 } max={ 10000 } width="3.5em" />
+                        <span>{ t( `dashboard.iu_vitamin_d` ) }</span>
+                        <span>{ t( `dashboard.rda`, { percent: daily_percent } ) }</span>
+                    </HeadingRow>
                 </SolarNoonHeading>
                 <PillRow>
                     <Pill $active={ time_mode === `now` } onClick={ select_now }>
@@ -395,9 +409,7 @@ export default function Dashboard( { settings, update_settings, reset_settings }
                 </SkinTypeLink>{ ` ` }{ t( `dashboard.exposed_to_sun` ) }{ ` ` }
                 <SkinTypeLink onClick={ () => set_show_skin_modal( true ) }>
                     { t( `skin.type${ local_skin }` ) }
-                </SkinTypeLink>, { t( `dashboard.target_of` ) }{ ` ` }
-                <InlineInput value={ local_iu } on_change={ change_iu } on_blur={ commit_iu } min={ 100 } max={ 10000 } width="4em" /> { t( `dashboard.iu_which_is` ) }{ ` ` }
-                <strong>{ daily_percent }%</strong> { t( `dashboard.daily_recommended` ) }
+                </SkinTypeLink>.
             </SettingsText>
 
             { /* Chart */ }

@@ -23,7 +23,8 @@ export default {
 
     // ── Dashboard ─────────────────────────────────
     'dashboard.target_heading': `{minutes}分`,
-    'dashboard.rda': `推奨量の{percent}%`,
+    'dashboard.iu_vitamin_d': `IU ビタミンD`,
+    'dashboard.rda': `(推奨量の{percent}%)`,
     'dashboard.now': `現在`,
     'dashboard.solar_noon': `南中時`,
     'dashboard.at_time': `{time}の時点で`,
@@ -32,11 +33,8 @@ export default {
     'dashboard.more_vitd': `{ratio}倍多い`,
     'dashboard.less_vitd': `{ratio}倍少ない`,
     'dashboard.than_burn': `日焼けリスクに対するビタミンD`,
-    'dashboard.assumes': `前提条件:`,
+    'dashboard.assumes': `晴天を前提とし、`,
     'dashboard.exposed_to_sun': `を日光に露出、肌タイプ`,
-    'dashboard.target_of': `目標値`,
-    'dashboard.iu_which_is': `IU（これは`,
-    'dashboard.daily_recommended': `1日の推奨量に相当）`,
     'dashboard.location_label': `場所: {value}`,
     'dashboard.reset': `位置と設定をリセット`,
 

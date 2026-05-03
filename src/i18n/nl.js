@@ -23,7 +23,8 @@ export default {
 
     // ── Dashboard ─────────────────────────────────
     'dashboard.target_heading': `{minutes} min om`,
-    'dashboard.rda': `{percent}% ADH`,
+    'dashboard.iu_vitamin_d': `IE Vitamine D`,
+    'dashboard.rda': `({percent}% ADH)`,
     'dashboard.now': `Nu`,
     'dashboard.solar_noon': `zonne-middag`,
     'dashboard.at_time': `Om {time}`,
@@ -32,11 +33,8 @@ export default {
     'dashboard.more_vitd': `{ratio}x meer`,
     'dashboard.less_vitd': `{ratio}x minder`,
     'dashboard.than_burn': `vitamine D dan verbrandingsrisico opleveren`,
-    'dashboard.assumes': `Dit gaat uit van`,
+    'dashboard.assumes': `Dit gaat uit van een heldere lucht en`,
     'dashboard.exposed_to_sun': `blootgesteld aan de zon, huidtype`,
-    'dashboard.target_of': `en een doel van`,
-    'dashboard.iu_which_is': `IE, dat is`,
-    'dashboard.daily_recommended': `van de aanbevolen dagelijkse hoeveelheid.`,
     'dashboard.location_label': `Locatie: {value}`,
     'dashboard.reset': `Locatie & instellingen resetten`,
 
