@@ -364,7 +364,7 @@ export default function Dashboard( { settings, update_settings, reset_settings }
                         onBlur={ ( e ) => commit_time( e.target.value ) }
                         onKeyDown={ ( e ) => e.key === `Enter` && commit_time( e.target.value ) }
                     />
-                    <ArrowBigRight size={ 22 } strokeWidth={ 1.75 } />
+                    <ArrowBigRight size={ 22 } strokeWidth={ 1.75 } fill="currentColor" />
                     <span>{ t( `dashboard.rda`, { percent: daily_percent } ) }</span>
                 </SolarNoonHeading>
                 <PillRow>
