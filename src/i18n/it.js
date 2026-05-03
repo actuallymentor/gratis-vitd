@@ -24,6 +24,7 @@ export default {
 
     // ── Dashboard ─────────────────────────────────
     'dashboard.target_heading': `Obiettivo: {minutes} min alle`,
+    'dashboard.now': `Adesso`,
     'dashboard.solar_noon': `mezzogiorno solare`,
     'dashboard.at_time': `Alle {time}`,
     'dashboard.burn_time': `il tempo stimato di scottatura è {minutes} minuti.`,

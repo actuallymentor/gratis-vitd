@@ -24,6 +24,7 @@ export default {
 
     // ── Dashboard ─────────────────────────────────
     'dashboard.target_heading': `Ziel: {minutes} Min. um`,
+    'dashboard.now': `Jetzt`,
     'dashboard.solar_noon': `Sonnenhöchststand`,
     'dashboard.at_time': `Um {time}`,
     'dashboard.burn_time': `beträgt die geschätzte Sonnenbrandzeit {minutes} Minuten.`,

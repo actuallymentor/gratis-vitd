@@ -24,6 +24,7 @@ export default {
 
     // ── Dashboard ─────────────────────────────────
     'dashboard.target_heading': `Doel: {minutes} min om`,
+    'dashboard.now': `Nu`,
     'dashboard.solar_noon': `zonne-middag`,
     'dashboard.at_time': `Om {time}`,
     'dashboard.burn_time': `is de geschatte verbranding {minutes} minuten.`,

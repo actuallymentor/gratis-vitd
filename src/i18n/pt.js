@@ -24,6 +24,7 @@ export default {
 
     // ── Dashboard ─────────────────────────────────
     'dashboard.target_heading': `Meta: {minutes} min às`,
+    'dashboard.now': `Agora`,
     'dashboard.solar_noon': `meio-dia solar`,
     'dashboard.at_time': `Às {time}`,
     'dashboard.burn_time': `o tempo estimado de queimadura é {minutes} minutos.`,

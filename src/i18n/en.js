@@ -24,6 +24,7 @@ export default {
 
     // ── Dashboard ─────────────────────────────────
     'dashboard.target_heading': `Target: {minutes} min at`,
+    'dashboard.now': `Now`,
     'dashboard.solar_noon': `solar noon`,
     'dashboard.at_time': `At {time}`,
     'dashboard.burn_time': `estimated burn time is {minutes} minutes.`,

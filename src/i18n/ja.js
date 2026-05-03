@@ -24,6 +24,7 @@ export default {
 
     // ── Dashboard ─────────────────────────────────
     'dashboard.target_heading': `目標: {minutes}分`,
+    'dashboard.now': `現在`,
     'dashboard.solar_noon': `南中時`,
     'dashboard.at_time': `{time}の時点で`,
     'dashboard.burn_time': `推定日焼け時間は{minutes}分です。`,

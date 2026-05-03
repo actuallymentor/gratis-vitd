@@ -24,6 +24,7 @@ export default {
 
     // ── Dashboard ─────────────────────────────────
     'dashboard.target_heading': `目标：{minutes}分钟`,
+    'dashboard.now': `现在`,
     'dashboard.solar_noon': `正午`,
     'dashboard.at_time': `在{time}`,
     'dashboard.burn_time': `预计晒伤时间为{minutes}分钟。`,

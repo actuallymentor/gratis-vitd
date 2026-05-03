@@ -24,6 +24,7 @@ export default {
 
     // ── Dashboard ─────────────────────────────────
     'dashboard.target_heading': `Цель: {minutes} мин. в`,
+    'dashboard.now': `Сейчас`,
     'dashboard.solar_noon': `солнечный полдень`,
     'dashboard.at_time': `В {time}`,
     'dashboard.burn_time': `расчётное время до ожога — {minutes} минут.`,

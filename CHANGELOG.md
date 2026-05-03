@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.5.0] - 2026-05-03
+
+### Added
+- i18n with 11 languages — auto-detects browser locale, persists choice (943e743)
+- Floating language selector globe in top-right corner (943e743)
+- Now / solar noon pills under the heading to switch the selected time
+- Time defaults to the current local clock on load (was solar noon)
+
+### Changed
+- Time input replaced with plain text field + HH:MM validation (41d5903)
+- Time input width tightened to 5ch (a1fe7a8)
+
 ## [1.4.0] - 2026-03-09
 
 ### Added

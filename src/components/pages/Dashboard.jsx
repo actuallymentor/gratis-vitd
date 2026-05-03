@@ -86,6 +86,30 @@ const SolarNoonHeading = styled.h2`
     font-weight: 500;
 `
 
+const PillRow = styled.div`
+    display: flex;
+    gap: var(--space-s);
+    flex-wrap: wrap;
+    justify-content: center;
+`
+
+// Active pill = filled accent; inactive = outlined and muted
+const Pill = styled.button`
+    padding: var(--space-xs) var(--space-m);
+    border: 2px solid ${ ( { $active } ) => $active ? `var(--accent)` : `var(--border)` };
+    border-radius: 999px;
+    background: ${ ( { $active } ) => $active ? `var(--accent)` : `transparent` };
+    color: ${ ( { $active } ) => $active ? `var(--surface)` : `var(--text-muted)` };
+    font-size: 0.85em;
+    font-weight: 600;
+    transition: all 0.2s ease;
+
+    &:hover {
+        border-color: var(--accent);
+        color: ${ ( { $active } ) => $active ? `var(--surface)` : `var(--text)` };
+    }
+`
+
 const InlineTimeInput = styled.input.attrs( { type: `text`, inputMode: `numeric`, maxLength: 5, placeholder: `HH:MM` } )`
     width: 5ch;
     text-align: center;
@@ -124,6 +148,12 @@ const LessLabel = styled.strong`
 
 // NIH daily recommended IU for adults
 const DAILY_RECOMMENDED_IU = 600
+
+// Current local clock as HH:MM — used as the default time and by the "Now" pill
+const get_now_time = () => {
+    const now = new Date()
+    return `${ String( now.getHours() ).padStart( 2, `0` ) }:${ String( now.getMinutes() ).padStart( 2, `0` ) }`
+}
 
 
 /**
@@ -183,11 +213,12 @@ export default function Dashboard( { settings, update_settings, reset_settings }
 
     const daily_percent = Math.round( local_iu / DAILY_RECOMMENDED_IU * 100 )
 
-    // Editable time — null means "use solar noon"
-    const [ selected_time, set_selected_time ] = useState( null )
+    // Selected time defaults to the current local clock; mode tracks which pill (if any) is active
+    const [ selected_time, set_selected_time ] = useState( get_now_time )
+    const [ time_mode, set_time_mode ] = useState( `now` )
     const [ time_draft, set_time_draft ] = useState( null )
 
-    // Validate and apply a time string like "14:30"
+    // Validate and apply a time string like "14:30" — manual edits become "custom" mode
     const commit_time = useCallback( ( raw ) => {
         const match = raw.match( /^(\d{1,2}):(\d{2})$/ )
         if( !match ) return set_time_draft( null )
@@ -196,6 +227,19 @@ export default function Dashboard( { settings, update_settings, reset_settings }
         const formatted = `${ String( h ).padStart( 2, `0` ) }:${ String( m ).padStart( 2, `0` ) }`
         set_time_draft( null )
         set_selected_time( formatted )
+        set_time_mode( `custom` )
+    }, [] )
+
+    // Pill: snap to current local time
+    const select_now = useCallback( () => {
+        set_selected_time( get_now_time() )
+        set_time_mode( `now` )
+    }, [] )
+
+    // Chart click also counts as a manual override
+    const select_from_chart = useCallback( ( time ) => {
+        set_selected_time( time )
+        set_time_mode( `custom` )
     }, [] )
 
     // Full solar data for the day (memoize once per location)
@@ -208,7 +252,14 @@ export default function Dashboard( { settings, update_settings, reset_settings }
         return peak.time.toLocaleTimeString( [], { hour: `2-digit`, minute: `2-digit`, hour12: false } )
     }, [ solar_data ] )
 
-    // Effective time: user-selected or solar noon
+    // Pill: snap to solar noon (depends on noon_time so it stays current after location change)
+    const select_solar_noon = useCallback( () => {
+        if( !noon_time ) return
+        set_selected_time( noon_time )
+        set_time_mode( `solar_noon` )
+    }, [ noon_time ] )
+
+    // Effective time: user-selected or fallback to solar noon (e.g. before solar_data is ready)
     const effective_time = selected_time || noon_time
 
     // Derive minutes / burn / ratio for the selected time
@@ -252,9 +303,16 @@ export default function Dashboard( { settings, update_settings, reset_settings }
                         onKeyDown={ ( e ) => e.key === `Enter` && commit_time( e.target.value ) }
                     />
                 </SolarNoonHeading>
+                <PillRow>
+                    <Pill $active={ time_mode === `now` } onClick={ select_now }>
+                        { t( `dashboard.now` ) }
+                    </Pill>
+                    <Pill $active={ time_mode === `solar_noon` } onClick={ select_solar_noon }>
+                        { t( `dashboard.solar_noon` ) }
+                    </Pill>
+                </PillRow>
                 <SolarNoonSub>
                     { t( `dashboard.at_time`, { time: effective_time } ) }
-                    { !selected_time && ` (${ t( `dashboard.solar_noon` ) })` }
                     { ` ` }{ t( `dashboard.burn_time`, { minutes: selected_data.burn } ) }
                     { ` ` }{ t( `dashboard.your_minutes`, { minutes: selected_data.minutes } ) }{ ` ` }
                     { selected_data.is_more
@@ -284,7 +342,7 @@ export default function Dashboard( { settings, update_settings, reset_settings }
                 percent_exposed={ local_exposed }
                 target_iu={ local_iu }
                 selected_time={ selected_data?.matched_time }
-                on_select_time={ set_selected_time }
+                on_select_time={ select_from_chart }
             />
 
             { /* Actions */ }

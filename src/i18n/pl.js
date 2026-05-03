@@ -24,6 +24,7 @@ export default {
 
     // ── Dashboard ─────────────────────────────────
     'dashboard.target_heading': `Cel: {minutes} min o`,
+    'dashboard.now': `Teraz`,
     'dashboard.solar_noon': `południe słoneczne`,
     'dashboard.at_time': `O {time}`,
     'dashboard.burn_time': `szacowany czas do oparzenia to {minutes} minut.`,
