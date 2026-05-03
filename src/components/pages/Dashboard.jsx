@@ -201,6 +201,15 @@ const SolarNoonSub = styled.p`
     line-height: 1.8;
 `
 
+// Subtle separator between the pills cluster and the explanatory paragraphs
+const Divider = styled.hr`
+    width: 100%;
+    max-width: 280px;
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin-block: var(--space-s);
+`
+
 const MoreLabel = styled.strong`
     color: var(--safe);
 `
@@ -452,6 +461,7 @@ export default function Dashboard( { settings, update_settings, reset_settings }
                         { t( `dashboard.solar_noon` ) }
                     </Pill>
                 </PillRow>
+                <Divider />
                 <SolarNoonSub>
                     { t( `dashboard.at_time`, { time: effective_time } ) }
                     { ` ` }{ t( `dashboard.burn_time`, { minutes: selected_data.burn } ) }
