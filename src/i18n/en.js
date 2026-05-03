@@ -25,6 +25,7 @@ export default {
     'dashboard.target_heading': `{minutes} min at`,
     'dashboard.iu_vitamin_d': `IU Vitamin D`,
     'dashboard.rda': `({percent}% RDA)`,
+    'dashboard.sunbathing_time': `Sunbathing time:`,
     'dashboard.now': `Now`,
     'dashboard.solar_noon': `solar noon`,
     'dashboard.at_time': `At {time}`,

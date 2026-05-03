@@ -25,6 +25,7 @@ export default {
     'dashboard.target_heading': `{minutes} min om`,
     'dashboard.iu_vitamin_d': `IE Vitamine D`,
     'dashboard.rda': `({percent}% ADH)`,
+    'dashboard.sunbathing_time': `Zontijd:`,
     'dashboard.now': `Nu`,
     'dashboard.solar_noon': `zonne-middag`,
     'dashboard.at_time': `Om {time}`,

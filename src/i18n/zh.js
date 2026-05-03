@@ -25,6 +25,7 @@ export default {
     'dashboard.target_heading': `{minutes}分钟`,
     'dashboard.iu_vitamin_d': `IU 维生素D`,
     'dashboard.rda': `(推荐量的{percent}%)`,
+    'dashboard.sunbathing_time': `日晒时间：`,
     'dashboard.now': `现在`,
     'dashboard.solar_noon': `正午`,
     'dashboard.at_time': `在{time}`,

@@ -25,6 +25,7 @@ export default {
     'dashboard.target_heading': `{minutes} min o`,
     'dashboard.iu_vitamin_d': `IU witaminy D`,
     'dashboard.rda': `({percent}% RDA)`,
+    'dashboard.sunbathing_time': `Czas opalania:`,
     'dashboard.now': `Teraz`,
     'dashboard.solar_noon': `południe słoneczne`,
     'dashboard.at_time': `O {time}`,

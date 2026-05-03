@@ -25,6 +25,7 @@ export default {
     'dashboard.target_heading': `{minutes} мин. в`,
     'dashboard.iu_vitamin_d': `МЕ витамина D`,
     'dashboard.rda': `({percent}% РСП)`,
+    'dashboard.sunbathing_time': `Время загара:`,
     'dashboard.now': `Сейчас`,
     'dashboard.solar_noon': `солнечный полдень`,
     'dashboard.at_time': `В {time}`,

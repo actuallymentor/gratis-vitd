@@ -25,6 +25,7 @@ export default {
     'dashboard.target_heading': `{minutes} min à`,
     'dashboard.iu_vitamin_d': `UI Vitamine D`,
     'dashboard.rda': `({percent}% AJR)`,
+    'dashboard.sunbathing_time': `Temps de bronzage :`,
     'dashboard.now': `Maintenant`,
     'dashboard.solar_noon': `midi solaire`,
     'dashboard.at_time': `À {time}`,

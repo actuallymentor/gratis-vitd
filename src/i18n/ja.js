@@ -25,6 +25,7 @@ export default {
     'dashboard.target_heading': `{minutes}分`,
     'dashboard.iu_vitamin_d': `IU ビタミンD`,
     'dashboard.rda': `(推奨量の{percent}%)`,
+    'dashboard.sunbathing_time': `日光浴時間：`,
     'dashboard.now': `現在`,
     'dashboard.solar_noon': `南中時`,
     'dashboard.at_time': `{time}の時点で`,

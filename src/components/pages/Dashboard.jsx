@@ -117,15 +117,21 @@ const HeadingRow = styled.span`
 `
 
 // Secondary row sits a notch smaller than the title's first line
-const SubHeadingRow = styled(HeadingRow)`
+const SubHeadingRow = styled( HeadingRow )`
     font-size: 0.85em;
 `
 
 const PillRow = styled.div`
     display: flex;
+    align-items: center;
     gap: var(--space-s);
     flex-wrap: wrap;
     justify-content: center;
+`
+
+const PillLabel = styled.span`
+    font-size: 0.85em;
+    color: var(--text-muted);
 `
 
 // Active pill = filled accent; inactive = outlined and muted
@@ -391,6 +397,7 @@ export default function Dashboard( { settings, update_settings, reset_settings }
                     </SubHeadingRow>
                 </SolarNoonHeading>
                 <PillRow>
+                    <PillLabel>{ t( `dashboard.sunbathing_time` ) }</PillLabel>
                     <Pill $active={ time_mode === `now` } onClick={ select_now }>
                         <Clock size={ 14 } />
                         { t( `dashboard.now` ) }

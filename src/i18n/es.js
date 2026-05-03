@@ -25,6 +25,7 @@ export default {
     'dashboard.target_heading': `{minutes} min a las`,
     'dashboard.iu_vitamin_d': `UI Vitamina D`,
     'dashboard.rda': `({percent}% CDR)`,
+    'dashboard.sunbathing_time': `Tiempo al sol:`,
     'dashboard.now': `Ahora`,
     'dashboard.solar_noon': `mediodía solar`,
     'dashboard.at_time': `A las {time}`,

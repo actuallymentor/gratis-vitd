@@ -25,6 +25,7 @@ export default {
     'dashboard.target_heading': `{minutes} Min. um`,
     'dashboard.iu_vitamin_d': `IE Vitamin D`,
     'dashboard.rda': `({percent}% TDR)`,
+    'dashboard.sunbathing_time': `Sonnenbadezeit:`,
     'dashboard.now': `Jetzt`,
     'dashboard.solar_noon': `Sonnenhöchststand`,
     'dashboard.at_time': `Um {time}`,
