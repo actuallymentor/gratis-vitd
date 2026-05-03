@@ -22,7 +22,8 @@ export default {
     'location.confirm': `Bevestigen`,
 
     // ── Dashboard ─────────────────────────────────
-    'dashboard.target_heading': `Doel: {minutes} min om`,
+    'dashboard.target_heading': `{minutes} min om`,
+    'dashboard.rda': `{percent}% ADH`,
     'dashboard.now': `Nu`,
     'dashboard.solar_noon': `zonne-middag`,
     'dashboard.at_time': `Om {time}`,

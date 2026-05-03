@@ -22,7 +22,8 @@ export default {
     'location.confirm': `確認`,
 
     // ── Dashboard ─────────────────────────────────
-    'dashboard.target_heading': `目標: {minutes}分`,
+    'dashboard.target_heading': `{minutes}分`,
+    'dashboard.rda': `推奨量の{percent}%`,
     'dashboard.now': `現在`,
     'dashboard.solar_noon': `南中時`,
     'dashboard.at_time': `{time}の時点で`,

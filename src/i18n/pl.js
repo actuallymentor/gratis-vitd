@@ -22,7 +22,8 @@ export default {
     'location.confirm': `Potwierdź`,
 
     // ── Dashboard ─────────────────────────────────
-    'dashboard.target_heading': `Cel: {minutes} min o`,
+    'dashboard.target_heading': `{minutes} min o`,
+    'dashboard.rda': `{percent}% RDA`,
     'dashboard.now': `Teraz`,
     'dashboard.solar_noon': `południe słoneczne`,
     'dashboard.at_time': `O {time}`,

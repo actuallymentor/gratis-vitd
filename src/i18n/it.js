@@ -22,7 +22,8 @@ export default {
     'location.confirm': `Conferma`,
 
     // ── Dashboard ─────────────────────────────────
-    'dashboard.target_heading': `Obiettivo: {minutes} min alle`,
+    'dashboard.target_heading': `{minutes} min alle`,
+    'dashboard.rda': `{percent}% RDA`,
     'dashboard.now': `Adesso`,
     'dashboard.solar_noon': `mezzogiorno solare`,
     'dashboard.at_time': `Alle {time}`,

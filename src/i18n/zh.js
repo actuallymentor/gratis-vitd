@@ -22,7 +22,8 @@ export default {
     'location.confirm': `确认`,
 
     // ── Dashboard ─────────────────────────────────
-    'dashboard.target_heading': `目标：{minutes}分钟`,
+    'dashboard.target_heading': `{minutes}分钟`,
+    'dashboard.rda': `推荐量的{percent}%`,
     'dashboard.now': `现在`,
     'dashboard.solar_noon': `正午`,
     'dashboard.at_time': `在{time}`,

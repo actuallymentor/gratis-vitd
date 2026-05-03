@@ -9,6 +9,7 @@
 - `auto_location` settings flag distinguishes browser geolocation from manual pick
 - Country field on each city entry; reverse geocoder returns "City, Country"
 - Clock and Sun icons inside the Now / solar noon pills
+- Title heading reads "{minutes} min at HH:MM → {percent}% RDA" with a lucide ArrowBigRight
 
 ### Changed
 - LOCATIONS catalogue extracted to `src/modules/locations.js` for reuse

@@ -22,7 +22,8 @@ export default {
     'location.confirm': `Bestätigen`,
 
     // ── Dashboard ─────────────────────────────────
-    'dashboard.target_heading': `Ziel: {minutes} Min. um`,
+    'dashboard.target_heading': `{minutes} Min. um`,
+    'dashboard.rda': `{percent}% TDR`,
     'dashboard.now': `Jetzt`,
     'dashboard.solar_noon': `Sonnenhöchststand`,
     'dashboard.at_time': `Um {time}`,

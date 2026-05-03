@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
-import { RotateCcw, Clock, Sun } from 'lucide-react'
+import { RotateCcw, Clock, Sun, ArrowBigRight } from 'lucide-react'
 import { log } from 'mentie'
 
 import ChartCard from '../molecules/ChartCard'
@@ -92,8 +92,16 @@ const SkinTypeLink = styled.button`
 `
 
 const SolarNoonHeading = styled.h2`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
     text-align: center;
     font-weight: 500;
+
+    /* Arrow inherits the heading color but stays a touch lighter */
+    svg { color: var(--text-muted); }
 `
 
 const PillRow = styled.div`
@@ -349,13 +357,15 @@ export default function Dashboard( { settings, update_settings, reset_settings }
             { /* Solar noon summary */ }
             { selected_data && <>
                 <SolarNoonHeading>
-                    { t( `dashboard.target_heading`, { minutes: selected_data.minutes } ) }{ ` ` }
+                    <span>{ t( `dashboard.target_heading`, { minutes: selected_data.minutes } ) }</span>
                     <InlineTimeInput
                         value={ time_draft ?? effective_time }
                         onChange={ ( e ) => set_time_draft( e.target.value ) }
                         onBlur={ ( e ) => commit_time( e.target.value ) }
                         onKeyDown={ ( e ) => e.key === `Enter` && commit_time( e.target.value ) }
                     />
+                    <ArrowBigRight size={ 22 } strokeWidth={ 1.75 } />
+                    <span>{ t( `dashboard.rda`, { percent: daily_percent } ) }</span>
                 </SolarNoonHeading>
                 <PillRow>
                     <Pill $active={ time_mode === `now` } onClick={ select_now }>

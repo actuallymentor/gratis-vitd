@@ -22,7 +22,8 @@ export default {
     'location.confirm': `Confirmer`,
 
     // ── Dashboard ─────────────────────────────────
-    'dashboard.target_heading': `Objectif : {minutes} min à`,
+    'dashboard.target_heading': `{minutes} min à`,
+    'dashboard.rda': `{percent}% AJR`,
     'dashboard.now': `Maintenant`,
     'dashboard.solar_noon': `midi solaire`,
     'dashboard.at_time': `À {time}`,
