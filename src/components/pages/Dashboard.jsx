@@ -140,11 +140,6 @@ const HeadingRow = styled.span`
     gap: var(--space-xs);
 `
 
-// Secondary row sits a notch smaller than the title's first line
-const SubHeadingRow = styled( HeadingRow )`
-    font-size: 0.85em;
-`
-
 const PillRow = styled.div`
     display: flex;
     align-items: center;
@@ -439,12 +434,12 @@ export default function Dashboard( { settings, update_settings, reset_settings }
                             onKeyDown={ ( e ) => e.key === `Enter` && commit_time( e.target.value ) }
                         />
                     </HeadingRow>
-                    <SubHeadingRow>
+                    <HeadingRow>
                         <span>{ t( `dashboard.for_iu` ) }</span>
                         <InlineInput value={ local_iu } on_change={ change_iu } on_blur={ commit_iu } min={ 100 } max={ 10000 } width="3.5em" />
                         <span>{ t( `dashboard.iu_vitamin_d` ) }</span>
                         <InfoTooltip content={ t( `dashboard.rda_tooltip`, { iu: local_iu, percent: daily_percent } ) } />
-                    </SubHeadingRow>
+                    </HeadingRow>
                 </SolarNoonHeading>
                 <PillRow>
                     <PillLabel>{ t( `dashboard.sunbathing_time` ) }</PillLabel>

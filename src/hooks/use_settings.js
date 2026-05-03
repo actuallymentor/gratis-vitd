@@ -7,7 +7,7 @@ const DEFAULTS = {
     lng: null,
     skin_type: 2,
     percent_exposed: 27,
-    target_iu: 1000,
+    target_iu: 2000,
     location_name: ``,
     // True when location came from the browser's geolocation API.
     // Drives periodic refresh + reverse geocoding in the dashboard.
