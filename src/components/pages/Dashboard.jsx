@@ -99,8 +99,12 @@ const SolarNoonHeading = styled.h2`
     text-align: center;
     font-weight: 500;
 
-    /* Arrow inherits the heading color but stays a touch lighter */
-    svg { color: var(--text-muted); }
+    /* Arrow inherits the heading color but stays a touch lighter,
+       and gets extra breathing room above and below */
+    > svg {
+        color: var(--text-muted);
+        margin-block: var(--space-s);
+    }
 `
 
 // Single line of the heading — keeps inline runs of text + inputs aligned
@@ -110,6 +114,11 @@ const HeadingRow = styled.span`
     justify-content: center;
     flex-wrap: wrap;
     gap: var(--space-xs);
+`
+
+// Secondary row sits a notch smaller than the title's first line
+const SubHeadingRow = styled(HeadingRow)`
+    font-size: 0.85em;
 `
 
 const PillRow = styled.div`
@@ -375,11 +384,11 @@ export default function Dashboard( { settings, update_settings, reset_settings }
                         />
                     </HeadingRow>
                     <ArrowBigDown size={ 26 } strokeWidth={ 1.75 } fill="currentColor" />
-                    <HeadingRow>
+                    <SubHeadingRow>
                         <InlineInput value={ local_iu } on_change={ change_iu } on_blur={ commit_iu } min={ 100 } max={ 10000 } width="3.5em" />
                         <span>{ t( `dashboard.iu_vitamin_d` ) }</span>
                         <span>{ t( `dashboard.rda`, { percent: daily_percent } ) }</span>
-                    </HeadingRow>
+                    </SubHeadingRow>
                 </SolarNoonHeading>
                 <PillRow>
                     <Pill $active={ time_mode === `now` } onClick={ select_now }>
