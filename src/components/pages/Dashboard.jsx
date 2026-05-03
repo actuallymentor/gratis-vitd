@@ -226,12 +226,14 @@ export default function Dashboard( { settings, update_settings, reset_settings }
 
     // Reverse-geocode coords into a city name whenever they change.
     // Offline static lookup — runs only for auto-located users.
+    // Empty string when no match so the label falls back to coords (and
+    // legacy "My location" strings from older versions get cleared out).
     useEffect( () => {
 
         if( !auto_location || lat === null || lng === null ) return
 
-        const name = reverse_geocode( lat, lng )
-        if( name && name !== location_name ) update_settings( { location_name: name } )
+        const name = reverse_geocode( lat, lng ) || ``
+        if( name !== location_name ) update_settings( { location_name: name } )
 
     }, [ lat, lng, auto_location, location_name, update_settings ] )
 
