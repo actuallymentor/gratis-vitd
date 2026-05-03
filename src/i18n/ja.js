@@ -22,9 +22,10 @@ export default {
     'location.confirm': `確認`,
 
     // ── Dashboard ─────────────────────────────────
-    'dashboard.target_heading': `{minutes}分`,
+    'dashboard.target_heading': `日光浴 {minutes}分`,
+    'dashboard.for_iu': `で`,
     'dashboard.iu_vitamin_d': `IU ビタミンD`,
-    'dashboard.rda': `(推奨量の{percent}%)`,
+    'dashboard.rda_tooltip': `{iu} IUのビタミンDは1日の推奨量の{percent}%に相当します`,
     'dashboard.sunbathing_time': `日光浴時間：`,
     'dashboard.now': `現在`,
     'dashboard.solar_noon': `南中時`,

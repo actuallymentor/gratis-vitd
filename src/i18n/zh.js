@@ -22,9 +22,10 @@ export default {
     'location.confirm': `确认`,
 
     // ── Dashboard ─────────────────────────────────
-    'dashboard.target_heading': `{minutes}分钟`,
+    'dashboard.target_heading': `晒太阳{minutes}分钟`,
+    'dashboard.for_iu': `获得`,
     'dashboard.iu_vitamin_d': `IU 维生素D`,
-    'dashboard.rda': `(推荐量的{percent}%)`,
+    'dashboard.rda_tooltip': `{iu} IU维生素D相当于每日推荐量的{percent}%`,
     'dashboard.sunbathing_time': `日晒时间：`,
     'dashboard.now': `现在`,
     'dashboard.solar_noon': `正午`,

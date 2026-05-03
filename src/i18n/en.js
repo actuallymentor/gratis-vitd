@@ -22,9 +22,10 @@ export default {
     'location.confirm': `Confirm`,
 
     // ── Dashboard ─────────────────────────────────
-    'dashboard.target_heading': `{minutes} min at`,
-    'dashboard.iu_vitamin_d': `IU Vitamin D`,
-    'dashboard.rda': `({percent}% RDA)`,
+    'dashboard.target_heading': `Sunbathe {minutes} min at`,
+    'dashboard.for_iu': `for`,
+    'dashboard.iu_vitamin_d': `IU vitamin D`,
+    'dashboard.rda_tooltip': `{iu} IU of vitamin D is {percent}% of the daily recommended amount`,
     'dashboard.sunbathing_time': `Sunbathing time:`,
     'dashboard.now': `Now`,
     'dashboard.solar_noon': `solar noon`,

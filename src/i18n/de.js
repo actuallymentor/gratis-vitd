@@ -22,9 +22,10 @@ export default {
     'location.confirm': `Bestätigen`,
 
     // ── Dashboard ─────────────────────────────────
-    'dashboard.target_heading': `{minutes} Min. um`,
+    'dashboard.target_heading': `Sonne tanken {minutes} Min. um`,
+    'dashboard.for_iu': `für`,
     'dashboard.iu_vitamin_d': `IE Vitamin D`,
-    'dashboard.rda': `({percent}% TDR)`,
+    'dashboard.rda_tooltip': `{iu} IE Vitamin D entsprechen {percent}% der empfohlenen Tagesmenge`,
     'dashboard.sunbathing_time': `Sonnenbadezeit:`,
     'dashboard.now': `Jetzt`,
     'dashboard.solar_noon': `Sonnenhöchststand`,

@@ -22,9 +22,10 @@ export default {
     'location.confirm': `Conferma`,
 
     // ── Dashboard ─────────────────────────────────
-    'dashboard.target_heading': `{minutes} min alle`,
-    'dashboard.iu_vitamin_d': `UI Vitamina D`,
-    'dashboard.rda': `({percent}% RDA)`,
+    'dashboard.target_heading': `Prendi il sole {minutes} min alle`,
+    'dashboard.for_iu': `per`,
+    'dashboard.iu_vitamin_d': `UI vitamina D`,
+    'dashboard.rda_tooltip': `{iu} UI di vitamina D corrispondono al {percent}% della dose giornaliera raccomandata`,
     'dashboard.sunbathing_time': `Tempo al sole:`,
     'dashboard.now': `Adesso`,
     'dashboard.solar_noon': `mezzogiorno solare`,

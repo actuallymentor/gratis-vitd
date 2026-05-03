@@ -22,9 +22,10 @@ export default {
     'location.confirm': `Potwierdź`,
 
     // ── Dashboard ─────────────────────────────────
-    'dashboard.target_heading': `{minutes} min o`,
+    'dashboard.target_heading': `Opalanie {minutes} min o`,
+    'dashboard.for_iu': `na`,
     'dashboard.iu_vitamin_d': `IU witaminy D`,
-    'dashboard.rda': `({percent}% RDA)`,
+    'dashboard.rda_tooltip': `{iu} IU witaminy D to {percent}% zalecanego dziennego spożycia`,
     'dashboard.sunbathing_time': `Czas opalania:`,
     'dashboard.now': `Teraz`,
     'dashboard.solar_noon': `południe słoneczne`,

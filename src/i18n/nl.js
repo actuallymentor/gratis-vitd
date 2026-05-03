@@ -22,9 +22,10 @@ export default {
     'location.confirm': `Bevestigen`,
 
     // ── Dashboard ─────────────────────────────────
-    'dashboard.target_heading': `{minutes} min om`,
-    'dashboard.iu_vitamin_d': `IE Vitamine D`,
-    'dashboard.rda': `({percent}% ADH)`,
+    'dashboard.target_heading': `Zonnen {minutes} min om`,
+    'dashboard.for_iu': `voor`,
+    'dashboard.iu_vitamin_d': `IE vitamine D`,
+    'dashboard.rda_tooltip': `{iu} IE vitamine D is {percent}% van de aanbevolen dagelijkse hoeveelheid`,
     'dashboard.sunbathing_time': `Zontijd:`,
     'dashboard.now': `Nu`,
     'dashboard.solar_noon': `zonne-middag`,

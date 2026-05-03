@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
-import { RotateCcw, Clock, Sun, ArrowBigDown } from 'lucide-react'
+import { RotateCcw, Clock, Sun, Info } from 'lucide-react'
 import { log } from 'mentie'
 
 import ChartCard from '../molecules/ChartCard'
@@ -98,13 +98,37 @@ const SolarNoonHeading = styled.h2`
     gap: var(--space-xs);
     text-align: center;
     font-weight: 500;
+`
 
-    /* Arrow inherits the heading color but stays a touch lighter,
-       and gets extra breathing room above and below */
-    > svg {
-        color: var(--text-muted);
-        margin-block: var(--space-s);
-    }
+// Inline info trigger — shows the tooltip on hover, focus, or tap
+const TooltipHost = styled.span`
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    color: var(--text-muted);
+    cursor: help;
+
+    &:hover,
+    &:focus-visible { color: var(--accent-dark); }
+`
+
+const TooltipBubble = styled.span`
+    position: absolute;
+    bottom: calc(100% + 0.5rem);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--text);
+    color: var(--surface);
+    padding: var(--space-xs) var(--space-s);
+    border-radius: 0.4rem;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    font-weight: 400;
+    width: max-content;
+    max-width: 240px;
+    text-align: center;
+    pointer-events: none;
+    z-index: 10;
 `
 
 // Single line of the heading — keeps inline runs of text + inputs aligned
@@ -197,6 +221,32 @@ const DAILY_RECOMMENDED_IU = 600
 const get_now_time = () => {
     const now = new Date()
     return `${ String( now.getHours() ).padStart( 2, `0` ) }:${ String( now.getMinutes() ).padStart( 2, `0` ) }`
+}
+
+/**
+ * Small info icon that reveals an explanatory bubble on hover, keyboard
+ * focus, or tap. Tap-to-toggle keeps the affordance usable on touch devices
+ * where hover doesn't fire.
+ * @param {{ content: string }} props
+ */
+function InfoTooltip( { content } ) {
+
+    const [ open, set_open ] = useState( false )
+
+    return <TooltipHost
+        tabIndex={ 0 }
+        role="button"
+        aria-label={ content }
+        onMouseEnter={ () => set_open( true ) }
+        onMouseLeave={ () => set_open( false ) }
+        onFocus={ () => set_open( true ) }
+        onBlur={ () => set_open( false ) }
+        onClick={ () => set_open( ( prev ) => !prev ) }
+    >
+        <Info size={ 16 } />
+        { open && <TooltipBubble>{ content }</TooltipBubble> }
+    </TooltipHost>
+
 }
 
 
@@ -389,11 +439,11 @@ export default function Dashboard( { settings, update_settings, reset_settings }
                             onKeyDown={ ( e ) => e.key === `Enter` && commit_time( e.target.value ) }
                         />
                     </HeadingRow>
-                    <ArrowBigDown size={ 26 } strokeWidth={ 1.75 } fill="currentColor" />
                     <SubHeadingRow>
+                        <span>{ t( `dashboard.for_iu` ) }</span>
                         <InlineInput value={ local_iu } on_change={ change_iu } on_blur={ commit_iu } min={ 100 } max={ 10000 } width="3.5em" />
                         <span>{ t( `dashboard.iu_vitamin_d` ) }</span>
-                        <span>{ t( `dashboard.rda`, { percent: daily_percent } ) }</span>
+                        <InfoTooltip content={ t( `dashboard.rda_tooltip`, { iu: local_iu, percent: daily_percent } ) } />
                     </SubHeadingRow>
                 </SolarNoonHeading>
                 <PillRow>

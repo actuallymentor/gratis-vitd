@@ -22,9 +22,10 @@ export default {
     'location.confirm': `Подтвердить`,
 
     // ── Dashboard ─────────────────────────────────
-    'dashboard.target_heading': `{minutes} мин. в`,
+    'dashboard.target_heading': `Загорайте {minutes} мин. в`,
+    'dashboard.for_iu': `для`,
     'dashboard.iu_vitamin_d': `МЕ витамина D`,
-    'dashboard.rda': `({percent}% РСП)`,
+    'dashboard.rda_tooltip': `{iu} МЕ витамина D — это {percent}% рекомендуемой суточной нормы`,
     'dashboard.sunbathing_time': `Время загара:`,
     'dashboard.now': `Сейчас`,
     'dashboard.solar_noon': `солнечный полдень`,

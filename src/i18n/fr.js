@@ -22,9 +22,10 @@ export default {
     'location.confirm': `Confirmer`,
 
     // ── Dashboard ─────────────────────────────────
-    'dashboard.target_heading': `{minutes} min à`,
-    'dashboard.iu_vitamin_d': `UI Vitamine D`,
-    'dashboard.rda': `({percent}% AJR)`,
+    'dashboard.target_heading': `Bronzez {minutes} min à`,
+    'dashboard.for_iu': `pour`,
+    'dashboard.iu_vitamin_d': `UI vitamine D`,
+    'dashboard.rda_tooltip': `{iu} UI de vitamine D représentent {percent}% de l'apport journalier recommandé`,
     'dashboard.sunbathing_time': `Temps de bronzage :`,
     'dashboard.now': `Maintenant`,
     'dashboard.solar_noon': `midi solaire`,
