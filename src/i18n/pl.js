@@ -36,6 +36,7 @@ export default {
     'dashboard.target_of': `i cel`,
     'dashboard.iu_which_is': `j.m., co stanowi`,
     'dashboard.daily_recommended': `zalecanej dziennej dawki.`,
+    'dashboard.location_label': `Lokalizacja: {value}`,
     'dashboard.reset': `Resetuj lokalizację i ustawienia`,
 
     // ── Chart ─────────────────────────────────────

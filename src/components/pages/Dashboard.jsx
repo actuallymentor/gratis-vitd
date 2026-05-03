@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
-import { RotateCcw } from 'lucide-react'
+import { RotateCcw, Clock, Sun } from 'lucide-react'
 import { log } from 'mentie'
 
 import ChartCard from '../molecules/ChartCard'
@@ -47,8 +47,9 @@ const ButtonRow = styled.div`
 `
 
 const LocationLabel = styled.p`
-    font-size: 0.85em;
+    font-size: 0.75em;
     color: var(--text-muted);
+    opacity: 0.9;
     text-align: center;
     line-height: 1.4;
 `
@@ -104,6 +105,9 @@ const PillRow = styled.div`
 
 // Active pill = filled accent; inactive = outlined and muted
 const Pill = styled.button`
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
     padding: var(--space-xs) var(--space-m);
     border: 2px solid ${ ( { $active } ) => $active ? `var(--accent)` : `var(--border)` };
     border-radius: 999px;
@@ -355,9 +359,11 @@ export default function Dashboard( { settings, update_settings, reset_settings }
                 </SolarNoonHeading>
                 <PillRow>
                     <Pill $active={ time_mode === `now` } onClick={ select_now }>
+                        <Clock size={ 14 } />
                         { t( `dashboard.now` ) }
                     </Pill>
                     <Pill $active={ time_mode === `solar_noon` } onClick={ select_solar_noon }>
+                        <Sun size={ 14 } />
                         { t( `dashboard.solar_noon` ) }
                     </Pill>
                 </PillRow>
@@ -397,7 +403,9 @@ export default function Dashboard( { settings, update_settings, reset_settings }
 
             { /* Current location summary */ }
             <LocationLabel>
-                { location_name || `${ lat.toFixed( 2 ) }°, ${ lng.toFixed( 2 ) }°` }
+                { t( `dashboard.location_label`, {
+                    value: location_name || `${ lat.toFixed( 2 ) }°, ${ lng.toFixed( 2 ) }°`,
+                } ) }
             </LocationLabel>
 
             { /* Actions */ }

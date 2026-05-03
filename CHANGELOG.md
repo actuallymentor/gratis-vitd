@@ -4,12 +4,15 @@
 
 ### Added
 - Auto-located users get periodic GPS refresh (on mount + every 30 min)
-- Subtle location label above the reset button — "Prague" or coords if unknown
+- Subtle "Location: City, Country" line above the reset button — falls back to coords when unknown
 - Offline reverse geocoding via static city lookup (no external APIs, ~150 km radius)
 - `auto_location` settings flag distinguishes browser geolocation from manual pick
+- Country field on each city entry; reverse geocoder returns "City, Country"
+- Clock and Sun icons inside the Now / solar noon pills
 
 ### Changed
 - LOCATIONS catalogue extracted to `src/modules/locations.js` for reuse
+- Manual city picks now record "City, Country" rather than just the city name
 
 ### Removed
 - Unused `onboarding.my_location` translation key across all locales

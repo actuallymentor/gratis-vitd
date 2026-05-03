@@ -23,15 +23,15 @@ function haversine_km( lat_a, lng_a, lat_b, lng_b ) {
 /**
  * Estimate a human-friendly place name for given coordinates using a
  * fully-offline lookup against the static LOCATIONS catalogue. Picks the
- * nearest known city and returns its name when within ~150 km of the user
- * (roughly a metro area). Beyond that the estimate gets too vague to be
- * trustworthy, so we return null and let callers show raw coordinates.
+ * nearest known city and returns "City, Country" when within ~150 km of
+ * the user (roughly a metro area). Beyond that the estimate gets too vague
+ * to be trustworthy, so we return null and let callers show raw coordinates.
  *
  * No network requests — works offline.
  *
  * @param {number} lat - Latitude in decimal degrees
  * @param {number} lng - Longitude in decimal degrees
- * @returns {string|null} City name like "Prague", or null when no nearby match
+ * @returns {string|null} e.g. "Prague, Czech Republic" — or null when no nearby match
  */
 export function reverse_geocode( lat, lng ) {
 
@@ -45,6 +45,9 @@ export function reverse_geocode( lat, lng ) {
     }, { city: null, distance_km: Infinity } )
 
     // 150 km ≈ within a metro area or the next big city over — useful as a regional label
-    return nearest.distance_km < 150 ? nearest.city.name : null
+    if( nearest.distance_km >= 150 ) return null
+
+    const { name, country } = nearest.city
+    return country ? `${ name }, ${ country }` : name
 
 }

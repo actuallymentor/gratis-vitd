@@ -36,6 +36,7 @@ export default {
     'dashboard.target_of': `и цель в`,
     'dashboard.iu_which_is': `МЕ, что составляет`,
     'dashboard.daily_recommended': `от рекомендуемой суточной нормы.`,
+    'dashboard.location_label': `Местоположение: {value}`,
     'dashboard.reset': `Сбросить местоположение и настройки`,
 
     // ── Chart ─────────────────────────────────────

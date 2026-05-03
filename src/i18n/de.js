@@ -36,6 +36,7 @@ export default {
     'dashboard.target_of': `und ein Ziel von`,
     'dashboard.iu_which_is': `IE, das sind`,
     'dashboard.daily_recommended': `der empfohlenen Tagesmenge.`,
+    'dashboard.location_label': `Standort: {value}`,
     'dashboard.reset': `Standort & Einstellungen zurücksetzen`,
 
     // ── Chart ─────────────────────────────────────

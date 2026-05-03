@@ -36,6 +36,7 @@ export default {
     'dashboard.target_of': `目标`,
     'dashboard.iu_which_is': `IU，占`,
     'dashboard.daily_recommended': `每日推荐量。`,
+    'dashboard.location_label': `位置：{value}`,
     'dashboard.reset': `重置位置和设置`,
 
     // ── Chart ─────────────────────────────────────

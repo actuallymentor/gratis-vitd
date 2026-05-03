@@ -36,6 +36,7 @@ export default {
     'dashboard.target_of': `目標値`,
     'dashboard.iu_which_is': `IU（これは`,
     'dashboard.daily_recommended': `1日の推奨量に相当）`,
+    'dashboard.location_label': `場所: {value}`,
     'dashboard.reset': `位置と設定をリセット`,
 
     // ── Chart ─────────────────────────────────────

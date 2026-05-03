@@ -36,6 +36,7 @@ export default {
     'dashboard.target_of': `e un obiettivo di`,
     'dashboard.iu_which_is': `UI pari al`,
     'dashboard.daily_recommended': `della dose giornaliera raccomandata.`,
+    'dashboard.location_label': `Posizione: {value}`,
     'dashboard.reset': `Reimposta posizione e impostazioni`,
 
     // ── Chart ─────────────────────────────────────

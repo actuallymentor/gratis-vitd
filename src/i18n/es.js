@@ -36,6 +36,7 @@ export default {
     'dashboard.target_of': `y un objetivo de`,
     'dashboard.iu_which_is': `UI que es el`,
     'dashboard.daily_recommended': `de la cantidad diaria recomendada.`,
+    'dashboard.location_label': `Ubicación: {value}`,
     'dashboard.reset': `Restablecer ubicación y ajustes`,
 
     // ── Chart ─────────────────────────────────────

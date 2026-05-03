@@ -36,6 +36,7 @@ export default {
     'dashboard.target_of': `et un objectif de`,
     'dashboard.iu_which_is': `UI soit`,
     'dashboard.daily_recommended': `de l'apport journalier recommandé.`,
+    'dashboard.location_label': `Position : {value}`,
     'dashboard.reset': `Réinitialiser position et paramètres`,
 
     // ── Chart ─────────────────────────────────────

@@ -179,7 +179,10 @@ export default function LocationPicker( { on_select, geo_loading, geo_error, req
 
     const select_location = ( loc ) => {
         log.info( `Location selected:`, loc.name, loc.lat, loc.lng )
-        on_select( loc.lat, loc.lng, loc.name )
+
+        // Cities carry their country — pass "City, Country" so the dashboard label is consistent
+        const display_name = loc.country ? `${ loc.name }, ${ loc.country }` : loc.name
+        on_select( loc.lat, loc.lng, display_name )
         set_modal_open( false )
     }
 
